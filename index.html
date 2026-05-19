@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Campus Lost and Found System</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #0f2044;
+    --navy-mid: #1a3260;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #fdf6e3;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --text-dark: #1a1a2e;
+    --text-mid: #4a4a6a;
+    --text-light: #8a8aaa;
+    --border: rgba(201,168,76,0.25);
+    --shadow: 0 4px 32px rgba(15,32,68,0.12);
+    --shadow-lg: 0 12px 48px rgba(15,32,68,0.18);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text-dark); min-height:100vh; }
+
+  /* HEADER */
+  header { background:var(--navy); position:sticky; top:0; z-index:100; box-shadow:0 2px 24px rgba(0,0,0,0.3); }
+  .header-inner { max-width:1200px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; height:72px; gap:1rem; }
+  .logo-area { display:flex; align-items:center; gap:14px; text-decoration:none; cursor:pointer; }
+  .logo-emblem { width:48px; height:48px; flex-shrink:0; }
+  .logo-text h1 { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; color:var(--gold-light); line-height:1.2; }
+  .logo-text span { font-size:0.7rem; color:rgba(255,255,255,0.5); letter-spacing:0.12em; text-transform:uppercase; font-weight:300; }
+  nav { display:flex; gap:4px; }
+  nav button { background:transparent; border:none; color:rgba(255,255,255,0.65); font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:500; padding:8px 16px; border-radius:var(--radius-sm); cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  nav button:hover, nav button.active { background:rgba(201,168,76,0.2); color:var(--gold-light); }
+  .btn-report { background:var(--gold); color:var(--navy); border:none; padding:9px 20px; border-radius:var(--radius-sm); font-family:'DM Sans',sans-serif; font-weight:600; font-size:0.85rem; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  .btn-report:hover { background:var(--gold-light); transform:translateY(-1px); }
+  .mobile-nav-btn { display:none; background:none; border:none; color:var(--gold-light); font-size:1.6rem; cursor:pointer; }
+
+  /* PAGES */
+  .page { display:none; }
+  .page.active { display:block; animation:fadeIn .3s; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+  /* HERO */
+  .hero { background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%); padding:5rem 1.5rem 4rem; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(201,168,76,0.1)'/%3E%3C/svg%3E") repeat; }
+  .hero-content { position:relative; max-width:700px; margin:0 auto; }
+  .hero-badge { display:inline-block; background:rgba(201,168,76,0.15); border:1px solid rgba(201,168,76,0.35); color:var(--gold-light); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; font-weight:500; padding:6px 16px; border-radius:100px; margin-bottom:1.5rem; }
+  .hero h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; color:var(--white); line-height:1.2; margin-bottom:1rem; }
+  .hero h2 em { font-style:normal; color:var(--gold-light); }
+  .hero p { color:rgba(255,255,255,0.65); font-size:1rem; line-height:1.7; margin-bottom:2.5rem; }
+  .hero-search { display:flex; max-width:520px; margin:0 auto; background:var(--white); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-lg); }
+  .hero-search input { flex:1; border:none; outline:none; padding:15px 20px; font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--text-dark); }
+  .hero-search button { background:var(--gold); border:none; padding:15px 24px; color:var(--navy); font-weight:600; font-size:0.9rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
+  .hero-search button:hover { background:var(--gold-light); }
+  .hero-stats { display:flex; justify-content:center; gap:3rem; margin-top:3rem; padding-top:2.5rem; border-top:1px solid rgba(201,168,76,0.2); }
+  .stat { text-align:center; }
+  .stat-num { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--gold-light); display:block; }
+  .stat-lbl { font-size:0.75rem; color:rgba(255,255,255,0.5); letter-spacing:0.08em; text-transform:uppercase; }
+
+  /* MAIN */
+  .main { max-width:1200px; margin:0 auto; padding:3rem 1.5rem; }
+  .section-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:1.5rem; gap:1rem; flex-wrap:wrap; }
+  .section-header h3 { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:600; color:var(--navy); }
+  .section-header p { font-size:0.85rem; color:var(--text-light); margin-top:4px; }
+
+  /* FILTER BAR */
+  .filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:2rem; }
+  .filter-chip { background:var(--white); border:1px solid var(--border); color:var(--text-mid); padding:7px 16px; border-radius:100px; font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .filter-chip:hover, .filter-chip.active { background:var(--navy); border-color:var(--navy); color:var(--white); }
+
+  /* ITEMS GRID */
+  .items-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.25rem; }
+  .item-card { background:var(--white); border-radius:var(--radius); border:1px solid rgba(0,0,0,0.06); overflow:hidden; box-shadow:var(--shadow); transition:all 0.25s; cursor:pointer; }
+  .item-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:var(--border); }
+  .item-img { width:100%; height:180px; display:flex; align-items:center; justify-content:center; font-size:3.5rem; background:var(--gold-pale); border-bottom:1px solid var(--border); }
+  .item-body { padding:1.1rem 1.25rem; }
+  .item-status { display:inline-block; font-size:0.7rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:4px 10px; border-radius:100px; margin-bottom:0.6rem; }
+  .status-lost { background:#fff0f0; color:#c0392b; }
+  .status-found { background:#f0fff4; color:#1a7a3e; }
+  .status-claimed { background:#f0f4ff; color:#2c5fa8; }
+  .item-body h4 { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:var(--navy); margin-bottom:0.35rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .item-body p { font-size:0.82rem; color:var(--text-mid); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .item-meta { display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding-top:0.8rem; border-top:1px solid rgba(0,0,0,0.06); }
+  .item-meta span { font-size:0.75rem; color:var(--text-light); }
+  .btn-sm { background:var(--navy); color:var(--white); border:none; padding:7px 14px; border-radius:var(--radius-sm); font-size:0.78rem; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
+  .btn-sm:hover { background:var(--navy-mid); }
+  .btn-sm.gold { background:var(--gold); color:var(--navy); }
+  .btn-sm.gold:hover { background:var(--gold-light); }
+  .empty-state { text-align:center; padding:4rem 2rem; color:var(--text-light); grid-column:1/-1; }
+  .empty-state .es-icon { font-size:3rem; margin-bottom:1rem; }
+  .empty-state p { font-size:1rem; }
+
+  /* FORM */
+  .form-container { max-width:720px; margin:0 auto; padding:3rem 1.5rem; }
+  .form-card { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); box-shadow:var(--shadow); padding:2.5rem; }
+  .form-header { display:flex; align-items:center; gap:16px; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); }
+  .form-icon { width:52px; height:52px; background:var(--gold-pale); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; flex-shrink:0; }
+  .form-header h3 { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:600; color:var(--navy); }
+  .form-header p { font-size:0.85rem; color:var(--text-light); margin-top:3px; }
+  .form-tabs { display:flex; gap:8px; margin-bottom:2rem; }
+  .form-tab { flex:1; padding:12px; border:2px solid var(--border); border-radius:var(--radius-sm); background:var(--white); cursor:pointer; text-align:center; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .form-tab .tab-icon { font-size:1.5rem; display:block; margin-bottom:6px; }
+  .form-tab .tab-label { font-size:0.85rem; font-weight:600; color:var(--text-mid); }
+  .form-tab .tab-sub { font-size:0.73rem; color:var(--text-light); }
+  .form-tab.active { border-color:var(--navy); background:var(--navy); }
+  .form-tab.active .tab-label { color:var(--gold-light); }
+  .form-tab.active .tab-sub { color:rgba(255,255,255,0.5); }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+  .form-grid .full { grid-column:1/-1; }
+  .field { display:flex; flex-direction:column; gap:6px; }
+  .field label { font-size:0.8rem; font-weight:600; color:var(--text-mid); letter-spacing:0.05em; text-transform:uppercase; }
+  .field input, .field select, .field textarea { border:1.5px solid rgba(0,0,0,0.12); border-radius:var(--radius-sm); padding:11px 14px; font-size:0.9rem; font-family:'DM Sans',sans-serif; color:var(--text-dark); background:var(--cream); outline:none; transition:border-color 0.2s; width:100%; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color:var(--gold); background:var(--white); }
+  .field textarea { resize:vertical; min-height:100px; }
+  .btn-primary { width:100%; background:var(--navy); color:var(--white); border:none; padding:14px; border-radius:var(--radius-sm); font-family:'Playfair Display',serif; font-size:1rem; font-weight:600; cursor:pointer; letter-spacing:0.02em; transition:all 0.2s; margin-top:0.5rem; }
+  .btn-primary:hover { background:var(--navy-mid); transform:translateY(-1px); }
+  .btn-primary.gold-btn { background:var(--gold); color:var(--navy); }
+  .btn-primary.gold-btn:hover { background:var(--gold-light); }
+  .field-error { color:#c0392b; font-size:0.78rem; margin-top:2px; display:none; }
+  .field.error input, .field.error select, .field.error textarea { border-color:#e74c3c; }
+  .field.error .field-error { display:block; }
+
+  /* UPLOAD ZONE */
+  .upload-zone { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:2rem; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--cream); }
+  .upload-zone:hover { border-color:var(--gold); background:var(--gold-pale); }
+  .upload-zone .upload-icon { font-size:2rem; margin-bottom:8px; }
+  .upload-zone p { font-size:0.85rem; color:var(--text-mid); }
+  .upload-zone span { font-size:0.75rem; color:var(--text-light); }
+  #photoInput { display:none; }
+  .photo-preview { display:none; width:100%; height:140px; border-radius:var(--radius-sm); overflow:hidden; margin-top:10px; border:1px solid var(--border); }
+  .photo-preview img { width:100%; height:100%; object-fit:cover; }
+
+  /* TOAST */
+  .toast { position:fixed; bottom:2rem; right:2rem; background:var(--navy); color:var(--white); padding:1rem 1.5rem; border-radius:var(--radius-sm); box-shadow:var(--shadow-lg); display:flex; align-items:center; gap:12px; font-size:0.9rem; font-weight:500; z-index:9999; transform:translateY(100px); opacity:0; transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .toast-icon { font-size:1.2rem; }
+  .toast-close { background:none; border:none; color:rgba(255,255,255,0.6); cursor:pointer; font-size:1rem; margin-left:8px; }
+  .toast.success { background:#1a7a3e; }
+  .toast.error-toast { background:#c0392b; }
+
+  /* MODAL */
+  .modal-overlay { position:fixed; inset:0; background:rgba(15,32,68,0.65); z-index:1000; display:flex; align-items:center; justify-content:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.25s; }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal { background:var(--white); border-radius:var(--radius); max-width:520px; width:100%; box-shadow:var(--shadow-lg); overflow:hidden; transform:scale(0.95) translateY(20px); transition:transform 0.25s; max-height:90vh; overflow-y:auto; }
+  .modal-overlay.open .modal { transform:scale(1) translateY(0); }
+  .modal-img { width:100%; height:200px; display:flex; align-items:center; justify-content:center; font-size:5rem; background:var(--gold-pale); border-bottom:1px solid var(--border); }
+  .modal-img img { width:100%; height:100%; object-fit:cover; }
+  .modal-body { padding:1.75rem; }
+  .modal-body h3 { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--navy); margin-bottom:0.5rem; }
+  .modal-meta { font-size:0.82rem; color:var(--text-light); margin-bottom:1rem; display:flex; flex-wrap:wrap; gap:8px; }
+  .modal-meta span { background:var(--cream); padding:3px 10px; border-radius:100px; border:1px solid var(--border); }
+  .modal-detail { font-size:0.9rem; color:var(--text-mid); line-height:1.7; margin-bottom:1.5rem; }
+  .modal-reporter { font-size:0.85rem; background:var(--gold-pale); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:1.5rem; }
+  .modal-reporter strong { color:var(--navy); }
+  .modal-actions { display:flex; gap:10px; }
+  .modal-actions button { flex:1; }
+  .btn-outline { background:transparent; border:1.5px solid var(--border); color:var(--text-mid); padding:10px; border-radius:var(--radius-sm); font-family:'DM Sans',sans-serif; font-weight:600; font-size:0.85rem; cursor:pointer; transition:all 0.2s; }
+  .btn-outline:hover { border-color:var(--navy); color:var(--navy); }
+
+  /* DASHBOARD */
+  .dash-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-bottom:2.5rem; }
+  .dash-card { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); padding:1.5rem; box-shadow:var(--shadow); }
+  .dash-card .dc-label { font-size:0.75rem; color:var(--text-light); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem; }
+  .dash-card .dc-num { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:700; color:var(--navy); line-height:1; margin-bottom:0.3rem; }
+  .dash-card .dc-sub { font-size:0.78rem; color:var(--text-light); }
+  .dash-card.gold-card { background:var(--navy); border-color:var(--navy); }
+  .dash-card.gold-card .dc-label { color:rgba(255,255,255,0.5); }
+  .dash-card.gold-card .dc-num { color:var(--gold-light); }
+  .dash-card.gold-card .dc-sub { color:rgba(255,255,255,0.4); }
+  .table-wrap { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow); margin-bottom:2rem; }
+  .table-head { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .table-head h4 { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:600; color:var(--navy); }
+  .table-wrap table { width:100%; border-collapse:collapse; }
+  .table-wrap thead th { padding:10px 16px; font-size:0.72rem; font-weight:600; color:var(--text-light); letter-spacing:0.1em; text-transform:uppercase; text-align:left; background:var(--cream); }
+  .table-wrap tbody td { padding:13px 16px; font-size:0.85rem; border-top:1px solid rgba(0,0,0,0.04); color:var(--text-mid); }
+  .table-wrap tbody tr:hover td { background:var(--gold-pale); }
+  .table-empty { padding:2rem; text-align:center; color:var(--text-light); font-size:0.9rem; }
+
+  /* ABOUT */
+  .about-hero { background:var(--navy); padding:4rem 1.5rem; text-align:center; }
+  .about-hero h2 { font-family:'Playfair Display',serif; font-size:2.2rem; color:var(--white); margin-bottom:1rem; }
+  .about-hero p { color:rgba(255,255,255,0.65); max-width:580px; margin:0 auto; line-height:1.7; }
+  .about-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.25rem; padding:3rem 1.5rem; max-width:1000px; margin:0 auto; }
+  .about-card { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); padding:2rem; text-align:center; box-shadow:var(--shadow); }
+  .about-card .ac-icon { font-size:2.5rem; margin-bottom:1rem; }
+  .about-card h4 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--navy); margin-bottom:0.6rem; }
+  .about-card p { font-size:0.85rem; color:var(--text-mid); line-height:1.6; }
+
+  /* FOOTER */
+  footer { background:var(--navy); color:rgba(255,255,255,0.5); text-align:center; padding:2rem 1.5rem; font-size:0.8rem; margin-top:4rem; }
+  footer strong { color:var(--gold-light); }
+
+  /* MOBILE */
+  @media(max-width:640px){
+    nav{display:none;}
+    .mobile-nav-btn{display:block;}
+    .form-grid{grid-template-columns:1fr;}
+    .form-card{padding:1.5rem;}
+    .hero-stats{gap:1.5rem;}
+    .form-tabs{flex-direction:column;}
+    .modal-actions{flex-direction:column;}
+  }
+  .mobile-nav { display:none; position:fixed; inset:0; background:var(--navy); z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem; }
+  .mobile-nav.open{display:flex;}
+  .mobile-nav button { background:none; border:none; color:var(--white); font-size:1.3rem; font-family:'Playfair Display',serif; cursor:pointer; }
+  .mobile-nav .close-btn { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; color:var(--gold-light); }
+
+  /* CLAIM MODAL */
+  .claim-form { margin-top:1rem; display:flex; flex-direction:column; gap:10px; }
+  .claim-form input { border:1.5px solid rgba(0,0,0,0.12); border-radius:var(--radius-sm); padding:10px 14px; font-size:0.9rem; font-family:'DM Sans',sans-serif; color:var(--text-dark); outline:none; }
+  .claim-form input:focus { border-color:var(--gold); }
+  .delete-btn { background:#fff0f0; color:#c0392b; border:1.5px solid #f5c6cb; padding:7px 14px; border-radius:var(--radius-sm); font-size:0.78rem; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+  .delete-btn:hover { background:#c0392b; color:#fff; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-area" onclick="showPage('home')">
+      <svg class="logo-emblem" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="23" fill="#1a3260" stroke="#c9a84c" stroke-width="1.5"/>
+        <rect x="10" y="18" width="28" height="18" rx="2" fill="#c9a84c" opacity="0.15"/>
+        <rect x="10" y="18" width="13.5" height="18" rx="2" fill="#c9a84c" opacity="0.3"/>
+        <rect x="23.5" y="18" width="14.5" height="18" rx="2" fill="#c9a84c" opacity="0.2"/>
+        <line x1="24" y1="18" x2="24" y2="36" stroke="#c9a84c" stroke-width="1.5" opacity="0.8"/>
+        <circle cx="29" cy="23" r="5.5" stroke="#c9a84c" stroke-width="1.8" fill="none"/>
+        <line x1="33.5" y1="27.5" x2="37" y2="31" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <text x="15" y="31" fill="#c9a84c" font-size="9" font-weight="700" font-family="serif" opacity="0.9">?</text>
+      </svg>
+      <div class="logo-text">
+        <h1>Campus Lost &amp; Found</h1>
+        <span>Official University System</span>
+      </div>
+    </div>
+    <nav>
+      <button class="active" id="nav-home" onclick="showPage('home')">Home</button>
+      <button id="nav-browse" onclick="showPage('browse')">Browse Items</button>
+      <button id="nav-report" onclick="showPage('report')">Report Item</button>
+      <button id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
+      <button id="nav-about" onclick="showPage('about')">About</button>
+    </nav>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="btn-report" onclick="showPage('report')">+ Report Item</button>
+      <button class="mobile-nav-btn" onclick="toggleMobileNav()">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-btn" onclick="toggleMobileNav()">✕</button>
+  <button onclick="showPage('home');toggleMobileNav()">Home</button>
+  <button onclick="showPage('browse');toggleMobileNav()">Browse Items</button>
+  <button onclick="showPage('report');toggleMobileNav()">Report Item</button>
+  <button onclick="showPage('dashboard');toggleMobileNav()">Dashboard</button>
+  <button onclick="showPage('about');toggleMobileNav()">About</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <span id="toastMsg">Item reported successfully!</span>
+  <button class="toast-close" onclick="hideToast()">✕</button>
+</div>
+
+<!-- ══ PAGE: HOME ══ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">🎓 Official University Portal</div>
+      <h2>Reuniting <em>Lost</em> Items<br>With Their Owners</h2>
+      <p>Report lost items, browse found belongings, and help our campus community stay connected. Every item has a story — let's write a happy ending.</p>
+      <div class="hero-search">
+        <input type="text" id="heroSearch" placeholder="Search by item name, location, or category..." onkeydown="if(event.key==='Enter')doHeroSearch()">
+        <button onclick="doHeroSearch()">Search</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="s-total">0</span><span class="stat-lbl">Items Listed</span></div>
+        <div class="stat"><span class="stat-num" id="s-found">0</span><span class="stat-lbl">Items Found</span></div>
+        <div class="stat"><span class="stat-num" id="s-rate">0%</span><span class="stat-lbl">Recovery Rate</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="section-header">
+      <div><h3>Recently Added Items</h3><p>Latest lost &amp; found reports from campus</p></div>
+      <button class="btn-sm" onclick="showPage('browse')">View All →</button>
+    </div>
+    <div class="items-grid" id="recentGrid"></div>
+  </div>
+</div>
+
+<!-- ══ PAGE: BROWSE ══ -->
+<div class="page" id="page-browse">
+  <div class="main">
+    <div class="section-header">
+      <div><h3>Browse All Items</h3><p>Filter by category or status to find what you're looking for</p></div>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-chip active" onclick="applyFilter('all','',this)">All Items</button>
+      <button class="filter-chip" onclick="applyFilter('status','lost',this)">🔴 Lost</button>
+      <button class="filter-chip" onclick="applyFilter('status','found',this)">🟢 Found</button>
+      <button class="filter-chip" onclick="applyFilter('status','claimed',this)">🔵 Claimed</button>
+      <button class="filter-chip" onclick="applyFilter('category','Electronics',this)">📱 Electronics</button>
+      <button class="filter-chip" onclick="applyFilter('category','Clothing',this)">👕 Clothing</button>
+      <button class="filter-chip" onclick="applyFilter('category','Accessories',this)">🎒 Accessories</button>
+      <button class="filter-chip" onclick="applyFilter('category','Documents',this)">📄 Documents</button>
+      <button class="filter-chip" onclick="applyFilter('category','Keys',this)">🔑 Keys</button>
+      <button class="filter-chip" onclick="applyFilter('category','Books',this)">📚 Books</button>
+      <button class="filter-chip" onclick="applyFilter('category','Other',this)">📦 Other</button>
+    </div>
+    <div class="items-grid" id="browseGrid"></div>
+  </div>
+</div>
+
+<!-- ══ PAGE: REPORT ══ -->
+<div class="page" id="page-report">
+  <div class="form-container">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="form-icon">📋</div>
+        <div>
+          <h3>Report an Item</h3>
+          <p>Fill in the details to help reunite lost property with its owner</p>
+        </div>
+      </div>
+      <div class="form-tabs">
+        <div class="form-tab active" id="tab-lost" onclick="switchTab('lost')">
+          <span class="tab-icon">😢</span>
+          <div class="tab-label">I Lost Something</div>
+          <div class="tab-sub">Report a lost item</div>
+        </div>
+        <div class="form-tab" id="tab-found" onclick="switchTab('found')">
+          <span class="tab-icon">🎉</span>
+          <div class="tab-label">I Found Something</div>
+          <div class="tab-sub">Report a found item</div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field full" id="field-name">
+          <label>Item Name *</label>
+          <input type="text" id="f-name" placeholder="e.g. Black Samsung Galaxy S24, Blue Umbrella..."/>
+          <span class="field-error">Please enter the item name.</span>
+        </div>
+        <div class="field" id="field-cat">
+          <label>Category *</label>
+          <select id="f-cat">
+            <option value="">Select category</option>
+            <option>Electronics</option>
+            <option>Clothing</option>
+            <option>Accessories</option>
+            <option>Documents</option>
+            <option>Keys</option>
+            <option>Jewelry</option>
+            <option>Books</option>
+            <option>Other</option>
+          </select>
+          <span class="field-error">Please select a category.</span>
+        </div>
+        <div class="field" id="field-date">
+          <label>Date *</label>
+          <input type="date" id="f-date"/>
+          <span class="field-error">Please select a date.</span>
+        </div>
+        <div class="field full" id="field-loc">
+          <label>Location *</label>
+          <input type="text" id="f-loc" placeholder="e.g. Library 2nd Floor, Canteen, Room 204..."/>
+          <span class="field-error">Please enter the location.</span>
+        </div>
+        <div class="field full" id="field-desc">
+          <label>Description *</label>
+          <textarea id="f-desc" placeholder="Describe the item in detail — color, brand, markings, condition..."></textarea>
+          <span class="field-error">Please add a description.</span>
+        </div>
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" id="f-reporter" placeholder="Full name"/>
+        </div>
+        <div class="field">
+          <label>Contact (Email / Phone)</label>
+          <input type="text" id="f-contact" placeholder="e.g. juan@school.edu or 09XX-XXX-XXXX"/>
+        </div>
+        <div class="field full">
+          <label>Photo (Optional)</label>
+          <div class="upload-zone" onclick="document.getElementById('photoInput').click()">
+            <div class="upload-icon">📷</div>
+            <p>Click to upload a photo of the item</p>
+            <span>JPG, PNG — max 5MB</span>
+          </div>
+          <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(this)"/>
+          <div class="photo-preview" id="photoPreview"><img id="photoImg" src="" alt="Preview"/></div>
+        </div>
+      </div>
+      <button class="btn-primary gold-btn" onclick="submitReport()">✅ Submit Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: DASHBOARD ══ -->
+<div class="page" id="page-dashboard">
+  <div class="main">
+    <div class="section-header">
+      <div><h3>Admin Dashboard</h3><p>Overview of all campus lost &amp; found activity</p></div>
+    </div>
+    <div class="dash-grid" id="dashStats"></div>
+    <div class="table-wrap">
+      <div class="table-head">
+        <h4>All Reports</h4>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="dashSearch" placeholder="Search..." style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 12px;font-size:0.85rem;outline:none;font-family:'DM Sans',sans-serif;" oninput="renderDashTable()"/>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Status</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Reporter</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dashTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: ABOUT ══ -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <h2>About This System</h2>
+    <p>The Campus Lost &amp; Found System helps students, faculty, and staff quickly report and locate lost items on campus — making our community more connected and caring.</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-card"><div class="ac-icon">🔍</div><h4>Easy Search</h4><p>Quickly search by item name, category, or location to find your lost belongings in seconds.</p></div>
+    <div class="about-card"><div class="ac-icon">📋</div><h4>Simple Reporting</h4><p>Lost or found something? Fill out a quick form and let the campus community help.</p></div>
+    <div class="about-card"><div class="ac-icon">🔔</div><h4>Organized Records</h4><p>All items are tracked with status updates — Lost, Found, or Claimed — so nothing slips through.</p></div>
+    <div class="about-card"><div class="ac-icon">🤝</div><h4>Community First</h4><p>Built on the belief that honest, helpful communities make campus life better for everyone.</p></div>
+    <div class="about-card"><div class="ac-icon">📱</div><h4>Works Anywhere</h4><p>Access from any device — phone, tablet, or computer — no app download required.</p></div>
+    <div class="about-card"><div class="ac-icon">🏫</div><h4>For Everyone</h4><p>Students, professors, and staff alike can report and browse items easily.</p></div>
+  </div>
+</div>
+
+<!-- ITEM MODAL -->
+<div class="modal-overlay" id="itemModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<footer>
+  <strong>Campus Lost &amp; Found System</strong> &mdash; Official University Portal &mdash; Helping reunite people with their belongings.
+</footer>
+
+<script>
+// ─────────────────────────────────────────
+// DATA STORE (localStorage)
+// ─────────────────────────────────────────
+const STORE_KEY = 'clf_items_v2';
+
+const CAT_ICONS = {
+  Electronics:'📱', Clothing:'👕', Accessories:'🎒',
+  Documents:'📄', Keys:'🔑', Jewelry:'💍', Books:'📚',
+  Other:'📦', '':'📦'
+};
+
+function loadItems() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch { return []; }
+}
+function saveItems(items) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(items));
+}
+
+// Seed sample data if empty
+function seedData() {
+  if (loadItems().length > 0) return;
+  const samples = [
+    { id:'s1', type:'lost', name:'Black iPhone 14', category:'Electronics', date:'2025-05-10', location:'Library 2nd Floor', description:'Black iPhone 14, cracked screen protector. Has a blue case with stickers.', reporter:'Maria Santos', contact:'maria@school.edu', photo:'', createdAt: Date.now()-86400000*3 },
+    { id:'s2', type:'found', name:'Blue Umbrella', category:'Accessories', date:'2025-05-12', location:'Canteen Entrance', description:'Large blue umbrella with white polka dots. Found near the entrance chairs.', reporter:'Juan Dela Cruz', contact:'09171234567', photo:'', createdAt: Date.now()-86400000*2 },
+    { id:'s3', type:'found', name:'Student ID — Ana Reyes', category:'Documents', date:'2025-05-13', location:'Room 204, Building A', description:'Student ID card for Ana Reyes, Year 3. Currently held at the Guidance Office.', reporter:'Prof. Garcia', contact:'guidance@school.edu', photo:'', createdAt: Date.now()-86400000 },
+    { id:'s4', type:'lost', name:'Set of Keys (3 keys)', category:'Keys', date:'2025-05-14', location:'Gymnasium', description:'Three keys on a small red keychain with a whistle. Lost during PE class.', reporter:'Carlos Mendoza', contact:'carlos@school.edu', photo:'', createdAt: Date.now()-3600000*5 },
+    { id:'s5', type:'found', name:'Gray Hoodie — L size', category:'Clothing', date:'2025-05-15', location:'Cafeteria', description:'Gray hoodie size L. Has a small "UP" logo on the chest. Left on a cafeteria chair.', reporter:'Anonymous', contact:'', photo:'', createdAt: Date.now()-3600000*2 },
+    { id:'s6', type:'claimed', name:'Red Wallet', category:'Accessories', date:'2025-05-08', location:'Admin Building', description:'Red leather wallet returned to its owner. Contained IDs and some cash.', reporter:'Security Office', contact:'security@school.edu', photo:'', createdAt: Date.now()-86400000*5 },
+  ];
+  saveItems(samples);
+}
+
+// ─────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────
+let currentPage = 'home';
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const nb = document.getElementById('nav-' + name);
+  if (nb) nb.classList.add('active');
+  currentPage = name;
+  if (name === 'home') renderHome();
+  if (name === 'browse') renderBrowse();
+  if (name === 'dashboard') renderDashboard();
+  window.scrollTo(0,0);
+}
+
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+// ─────────────────────────────────────────
+// RENDER HELPERS
+// ─────────────────────────────────────────
+function statusBadge(type) {
+  const map = { lost:'status-lost', found:'status-found', claimed:'status-claimed' };
+  const label = { lost:'Lost', found:'Found', claimed:'Claimed' };
+  return `<span class="item-status ${map[type]||'status-lost'}">${label[type]||type}</span>`;
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'}); } catch { return d; }
+}
+
+function makeCard(item) {
+  const icon = CAT_ICONS[item.category] || '📦';
+  const imgContent = item.photo
+    ? `<img src="${item.photo}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;"/>`
+    : icon;
+  return `
+    <div class="item-card" onclick="openModal('${item.id}')">
+      <div class="item-img">${imgContent}</div>
+      <div class="item-body">
+        ${statusBadge(item.type)}
+        <h4>${escHtml(item.name)}</h4>
+        <p>${escHtml(item.description)}</p>
+        <div class="item-meta">
+          <span>📍 ${escHtml(item.location)}</span>
+          <button class="btn-sm" onclick="event.stopPropagation();openModal('${item.id}')">View</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(str || ''));
+  return d.innerHTML;
+}
+
+// ─────────────────────────────────────────
+// HOME PAGE
+// ─────────────────────────────────────────
+function renderHome() {
+  const items = loadItems();
+  // Stats
+  document.getElementById('s-total').textContent = items.length;
+  const foundCount = items.filter(i => i.type === 'found' || i.type === 'claimed').length;
+  document.getElementById('s-found').textContent = foundCount;
+  const rate = items.length ? Math.round((items.filter(i=>i.type==='claimed').length / items.length)*100) : 0;
+  document.getElementById('s-rate').textContent = rate + '%';
+  // Recent (last 6)
+  const recent = [...items].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,6);
+  const grid = document.getElementById('recentGrid');
+  if (!recent.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>No items yet. Be the first to report one!</p></div>`;
+  } else {
+    grid.innerHTML = recent.map(makeCard).join('');
+  }
+}
+
+// ─────────────────────────────────────────
+// BROWSE PAGE
+// ─────────────────────────────────────────
+let browseFilter = { type:'all', key:'', val:'' };
+
+function applyFilter(key, val, btn) {
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  browseFilter = { key, val };
+  renderBrowse();
+}
+
+function renderBrowse(searchQ) {
+  let items = loadItems();
+  const { key, val } = browseFilter;
+  if (key === 'status' && val) items = items.filter(i => i.type === val);
+  else if (key === 'category' && val) items = items.filter(i => i.category === val);
+  if (searchQ) {
+    const q = searchQ.toLowerCase();
+    items = items.filter(i =>
+      (i.name||'').toLowerCase().includes(q) ||
+      (i.location||'').toLowerCase().includes(q) ||
+      (i.category||'').toLowerCase().includes(q) ||
+      (i.description||'').toLowerCase().includes(q)
+    );
+  }
+  items.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  const grid = document.getElementById('browseGrid');
+  if (!items.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><p>No items match your filter. Try a different category.</p></div>`;
+  } else {
+    grid.innerHTML = items.map(makeCard).join('');
+  }
+}
+
+function doHeroSearch() {
+  const q = document.getElementById('heroSearch').value.trim();
+  if (!q) return;
+  browseFilter = { key:'', val:'' };
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelector('.filter-chip').classList.add('active');
+  showPage('browse');
+  setTimeout(()=>renderBrowse(q), 50);
+}
+
+// ─────────────────────────────────────────
+// REPORT FORM
+// ─────────────────────────────────────────
+let activeTab = 'lost';
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.form-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+
+function previewPhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('photoImg').src = e.target.result;
+    document.getElementById('photoPreview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function validateField(id, fieldId) {
+  const val = document.getElementById(id).value.trim();
+  const field = document.getElementById(fieldId);
+  if (!val) { field.classList.add('error'); return false; }
+  field.classList.remove('error'); return true;
+}
+
+function submitReport() {
+  let valid = true;
+  valid = validateField('f-name','field-name') && valid;
+  valid = validateField('f-cat','field-cat') && valid;
+  valid = validateField('f-date','field-date') && valid;
+  valid = validateField('f-loc','field-loc') && valid;
+  valid = validateField('f-desc','field-desc') && valid;
+  if (!valid) { showToast('⚠️ Please fill in all required fields.','error-toast'); return; }
+
+  const photoImg = document.getElementById('photoImg');
+  const photo = (photoImg && photoImg.src && photoImg.src !== window.location.href) ? photoImg.src : '';
+
+  const item = {
+    id: 'id_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+    type: activeTab,
+    name: document.getElementById('f-name').value.trim(),
+    category: document.getElementById('f-cat').value,
+    date: document.getElementById('f-date').value,
+    location: document.getElementById('f-loc').value.trim(),
+    description: document.getElementById('f-desc').value.trim(),
+    reporter: document.getElementById('f-reporter').value.trim() || 'Anonymous',
+    contact: document.getElementById('f-contact').value.trim(),
+    photo,
+    createdAt: Date.now()
+  };
+
+  const items = loadItems();
+  items.unshift(item);
+  saveItems(items);
+
+  // Reset form
+  ['f-name','f-loc','f-desc','f-reporter','f-contact'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-cat').value='';
+  document.getElementById('f-date').value='';
+  document.getElementById('photoInput').value='';
+  document.getElementById('photoPreview').style.display='none';
+  document.getElementById('photoImg').src='';
+  ['field-name','field-cat','field-date','field-loc','field-desc'].forEach(id=>document.getElementById(id).classList.remove('error'));
+
+  showToast('✅ Item reported successfully! It is now visible to the campus.','success');
+  setTimeout(()=>showPage('browse'), 1200);
+}
+
+// ─────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────
+function renderDashboard() {
+  const items = loadItems();
+  const lost = items.filter(i=>i.type==='lost').length;
+  const found = items.filter(i=>i.type==='found').length;
+  const claimed = items.filter(i=>i.type==='claimed').length;
+  const rate = items.length ? Math.round((claimed/items.length)*100) : 0;
+
+  document.getElementById('dashStats').innerHTML = `
+    <div class="dash-card"><div class="dc-label">Total Items</div><div class="dc-num">${items.length}</div><div class="dc-sub">All time reports</div></div>
+    <div class="dash-card"><div class="dc-label">🔴 Lost</div><div class="dc-num">${lost}</div><div class="dc-sub">Awaiting recovery</div></div>
+    <div class="dash-card"><div class="dc-label">🟢 Found</div><div class="dc-num">${found}</div><div class="dc-sub">Waiting to be claimed</div></div>
+    <div class="dash-card gold-card"><div class="dc-label">🔵 Claimed</div><div class="dc-num">${claimed}</div><div class="dc-sub">Recovery rate: ${rate}%</div></div>
+  `;
+  renderDashTable();
+}
+
+function renderDashTable() {
+  const q = (document.getElementById('dashSearch')?.value||'').toLowerCase();
+  let items = loadItems();
+  if (q) items = items.filter(i =>
+    (i.name||'').toLowerCase().includes(q) ||
+    (i.location||'').toLowerCase().includes(q) ||
+    (i.reporter||'').toLowerCase().includes(q) ||
+    (i.category||'').toLowerCase().includes(q)
+  );
+  items.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  const tbody = document.getElementById('dashTable');
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="table-empty">No records found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = items.map(item => {
+    const statusMap = {lost:'status-lost',found:'status-found',claimed:'status-claimed'};
+    const statusLabel = {lost:'Lost',found:'Found',claimed:'Claimed'};
+    return `<tr>
+      <td><strong>${escHtml(item.name)}</strong></td>
+      <td><span class="item-status ${statusMap[item.type]||''}">${statusLabel[item.type]||item.type}</span></td>
+      <td>${CAT_ICONS[item.category]||'📦'} ${escHtml(item.category)}</td>
+      <td>${escHtml(item.location)}</td>
+      <td>${formatDate(item.date)}</td>
+      <td>${escHtml(item.reporter)}</td>
+      <td style="display:flex;gap:6px;align-items:center;">
+        ${item.type !== 'claimed' ? `<button class="btn-sm gold" onclick="markClaimed('${item.id}')">Mark Claimed</button>` : ''}
+        <button class="delete-btn" onclick="deleteItem('${item.id}')">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function markClaimed(id) {
+  const items = loadItems();
+  const idx = items.findIndex(i=>i.id===id);
+  if (idx<0) return;
+  items[idx].type = 'claimed';
+  saveItems(items);
+  renderDashboard();
+  showToast('🔵 Item marked as claimed!','success');
+}
+
+function deleteItem(id) {
+  if (!confirm('Delete this item? This cannot be undone.')) return;
+  const items = loadItems().filter(i=>i.id!==id);
+  saveItems(items);
+  renderDashboard();
+  showToast('🗑️ Item deleted.','');
+}
+
+// ─────────────────────────────────────────
+// ITEM MODAL
+// ─────────────────────────────────────────
+function openModal(id) {
+  const item = loadItems().find(i=>i.id===id);
+  if (!item) return;
+  const icon = CAT_ICONS[item.category]||'📦';
+  const imgSection = item.photo
+    ? `<div class="modal-img"><img src="${item.photo}" alt="${escHtml(item.name)}"/></div>`
+    : `<div class="modal-img" style="font-size:5rem;">${icon}</div>`;
+
+  document.getElementById('modalContent').innerHTML = `
+    ${imgSection}
+    <div class="modal-body">
+      ${statusBadge(item.type)}
+      <h3>${escHtml(item.name)}</h3>
+      <div class="modal-meta">
+        <span>📦 ${escHtml(item.category)}</span>
+        <span>📍 ${escHtml(item.location)}</span>
+        <span>📅 ${formatDate(item.date)}</span>
+      </div>
+      <div class="modal-detail">${escHtml(item.description)}</div>
+      ${item.reporter ? `<div class="modal-reporter">👤 Reported by <strong>${escHtml(item.reporter)}</strong>${item.contact ? ` &mdash; 📞 ${escHtml(item.contact)}` : ''}</div>` : ''}
+      <div class="modal-actions">
+        ${item.type !== 'claimed'
+          ? `<button class="btn-primary gold-btn" onclick="markClaimed('${item.id}');closeModal()">✅ Mark as Claimed</button>`
+          : `<button class="btn-primary" disabled style="opacity:.5;cursor:not-allowed;">✅ Already Claimed</button>`}
+        <button class="btn-outline" onclick="closeModal()">Close</button>
+      </div>
+    </div>`;
+  document.getElementById('itemModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('itemModal').classList.remove('open');
+}
+
+// ─────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────
+let toastTimer;
+function showToast(msg, cls='') {
+  const t = document.getElementById('toast');
+  t.className = 'toast' + (cls ? ' '+cls : '');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = cls==='success'?'✅':cls==='error-toast'?'⚠️':'ℹ️';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, 3500);
+}
+function hideToast() {
+  document.getElementById('toast').classList.remove('show');
+}
+
+// ─────────────────────────────────────────
+// SET TODAY'S DATE AS DEFAULT
+// ─────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', ()=>{
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-date').value = today;
+  seedData();
+  renderHome();
+});
+</script>
+</body>
+</html>     <label>Contact (Email / Phone)</label>
+          <input type="text" id="f-contact" placeholder="your@email.com or 09XX-XXX-XXXX">
+        </div>
+        <div class="field full">
+          <label>Photo (optional)</label>
+          <div class="upload-zone" onclick="this.querySelector('input').click()">
+            <div class="upload-icon">📷</div>
+            <p>Click to upload a photo</p>
+            <span>JPG, PNG up to 5MB</span>
+            <input type="file" accept="image/*" style="display:none" onchange="handlePhoto(this)">
+          </div>
+          <div id="photoPreview"></div>
+        </div>
+      </div>
+
+      <button class="btn-primary gold-btn" style="margin-top:1.5rem" onclick="submitItem()">Submit Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: DASHBOARD ══ -->
+<div class="page" id="page-dashboard">
+  <div class="main">
+    <div class="section-header">
+      <div>
+        <h3>Admin Dashboard</h3>
+        <p>Overview of all lost &amp; found activity</p>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="dash-card gold-card">
+        <div class="dc-label">Total Items</div>
+        <div class="dc-num" id="d-total">—</div>
+        <div class="dc-sub">All reports combined</div>
+      </div>
+      <div class="dash-card">
+        <div class="dc-label">Lost</div>
+        <div class="dc-num" id="d-lost" style="color:#c0392b">—</div>
+        <div class="dc-sub">Actively searching</div>
+      </div>
+      <div class="dash-card">
+        <div class="dc-label">Found</div>
+        <div class="dc-num" id="d-found" style="color:#1a7a3e">—</div>
+        <div class="dc-sub">Awaiting claim</div>
+      </div>
+      <div class="dash-card">
+        <div class="dc-label">Claimed</div>
+        <div class="dc-num" id="d-claimed" style="color:#2c5fa8">—</div>
+        <div class="dc-sub">Successfully returned</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-head">
+        <h4>All Reports</h4>
+        <button class="btn-sm" onclick="showPage('report')">+ Add Report</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="dashTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Item</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Reporter</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="dashBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE: ABOUT ══ -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <h2>About This System</h2>
+    <p>The Campus Lost and Found System is an official university initiative to help students, faculty, and staff recover lost belongings quickly and efficiently.</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="ac-icon">🔍</div>
+      <h4>Easy Search</h4>
+      <p>Browse and filter all reported items by category, status, or keyword to quickly find what you're looking for.</p>
+    </div>
+    <div class="about-card">
+      <div class="ac-icon">📱</div>
+      <h4>Works Everywhere</h4>
+      <p>Access the system from any device — desktop, tablet, or mobile. Share the link with friends to help spread the word.</p>
+    </div>
+    <div class="about-card">
+      <div class="ac-icon">🔔</div>
+      <h4>Quick Reporting</h4>
+      <p>Submit lost or found reports in minutes with our simple form. Include photos to improve identification accuracy.</p>
+    </div>
+    <div class="about-card">
+      <div class="ac-icon">🤝</div>
+      <h4>Community Driven</h4>
+      <p>Our system works because of caring campus community members who take time to report what they find.</p>
+    </div>
+    <div class="about-card">
+      <div class="ac-icon">📊</div>
+      <h4>Live Dashboard</h4>
+      <p>Admins can monitor all reports, update statuses, and track recovery rates in real time from any browser.</p>
+    </div>
+    <div class="about-card">
+      <div class="ac-icon">🔐</div>
+      <h4>Secure & Private</h4>
+      <p>Contact information is only shared between the item reporter and the admin office to protect everyone's privacy.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:0 1.5rem 4rem">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:0.8rem">Need Help?</h3>
+    <p style="color:var(--text-mid);font-size:0.9rem;max-width:480px;margin:0 auto 1.5rem;line-height:1.7">Visit the Student Affairs Office at the Administration Building, Ground Floor, or email us at <strong style="color:var(--navy)">lostfound@campus.edu.ph</strong></p>
+    <button class="btn-report" onclick="showPage('report')" style="display:inline-block">Report an Item</button>
+  </div>
+</div>
+
+<!-- ITEM MODAL -->
+<div class="modal-overlay" id="itemModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-img" id="modalImg">📦</div>
+    <div class="modal-body">
+      <div id="modalStatus"></div>
+      <h3 id="modalName"></h3>
+      <div class="modal-meta" id="modalMeta"></div>
+      <p class="modal-detail" id="modalDetail"></p>
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeModal()">Close</button>
+        <button class="btn-sm gold" onclick="claimItem()">Contact / Claim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <span id="toastMsg">Item submitted successfully!</span>
+  <button class="toast-close" onclick="hideToast()">✕</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Campus Lost and Found System</strong> &nbsp;·&nbsp; Official University Portal &nbsp;·&nbsp; &copy; 2025
+</footer>
+
+<script>
+// ── SAMPLE DATA ──
+const SAMPLE = [
+  { id:'LF-001', name:'iPhone 14 Pro (Gold)', cat:'Electronics', status:'found', loc:'Library 3rd Floor', date:'2025-05-14', reporter:'Security Office', contact:'ext-1234', desc:'Gold iPhone 14 Pro found near the study tables. Has a clear case with a small butterfly sticker on the back. Battery is dead. Currently at the security desk.', icon:'📱' },
+  { id:'LF-002', name:'Maroon Umbrella', cat:'Accessories', status:'lost', loc:'Main Canteen', date:'2025-05-15', reporter:'Maria Santos', contact:'maria.s@campus.edu', desc:'Maroon folding umbrella with a wooden handle. Last seen in the canteen during lunch break. Has initials "M.S." written in marker near the handle.', icon:'☂️' },
+  { id:'LF-003', name:'Dell Laptop Bag', cat:'Accessories', status:'found', loc:'Room 204, Engineering Bldg', date:'2025-05-13', reporter:'Prof. Reyes', contact:'j.reyes@campus.edu', desc:'Black Dell laptop bag found after last period. Contains no laptop but has notebooks and pens inside. Left unclaimed for 2 days after class.', icon:'🎒' },
+  { id:'LF-004', name:'Student ID – Juan dela Cruz', cat:'Documents', status:'claimed', loc:'Gymnasium', date:'2025-05-10', reporter:'Coach Bautista', contact:'ext-3210', desc:'Student ID found on the gymnasium bleachers after intramurals. ID number 2021-00123. Owner has been contacted and has claimed the ID.', icon:'🪪' },
+  { id:'LF-005', name:'Set of Car Keys (Toyota)', cat:'Keys', status:'found', loc:'Parking Lot B', date:'2025-05-16', reporter:'Guard Posting B', contact:'ext-4455', desc:'Toyota car keys with a Totoro keychain, found in Parking Lot B near the engineering entrance. Keys are currently at the security post.', icon:'🔑' },
+  { id:'LF-006', name:'Blue Polo Shirt (L)', cat:'Clothing', status:'lost', loc:'PE Grounds / Locker Room', date:'2025-05-12', reporter:'Ryan Delos Reyes', contact:'09171234567', desc:'Blue polo shirt size large, DLSCB uniform type. Left in the locker room after PE class. Name tag inside reads "Delos Reyes, Ryan" but tag is faded.', icon:'👕' },
+  { id:'LF-007', name:'Scientific Calculator (Casio fx-991)', cat:'Electronics', status:'lost', loc:'Room 310, Science Bldg', date:'2025-05-15', reporter:'Jennie Lim', contact:'jennie.lim@campus.edu', desc:'Casio fx-991EX ClassWiz scientific calculator. Black, with a small "JL" written in correction fluid on the back. Last used during Chemistry long exam.', icon:'🧮' },
+  { id:'LF-008', name:'Gold Necklace with Cross Pendant', cat:'Jewelry', status:'found', loc:'Comfort Room, Admin Bldg', date:'2025-05-11', reporter:'Janitor Staff', contact:'Housekeeping Office', desc:'Thin gold chain necklace with a small cross pendant. Found on the counter of the Admin Building 2nd floor CR. No name or markings. Held at the Admin Office.', icon:'📿' },
+];
+
+let items = [...SAMPLE];
+let currentTab = 'lost';
+let currentItem = null;
+let searchFilter = '';
+let statusFilter = 'all';
+let catFilter = '';
+
+// ── INIT ──
+window.onload = () => {
+  document.getElementById('f-date').valueAsDate = new Date();
+  renderAll();
+  updateStats();
+};
+
+function renderAll() { renderGrid('recentGrid', items.slice(0,6)); renderGrid('browseGrid', getFiltered()); renderDash(); }
+
+function getFiltered() {
+  return items.filter(it => {
+    const s = statusFilter === 'all' || it.status === statusFilter;
+    const c = !catFilter || it.cat === catFilter;
+    const q = !searchFilter || it.name.toLowerCase().includes(searchFilter) || it.loc.toLowerCase().includes(searchFilter) || it.cat.toLowerCase().includes(searchFilter);
+    return s && c && q;
+  });
+}
+
+function renderGrid(id, list) {
+  const g = document.getElementById(id);
+  if (!list.length) { g.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light)">No items found.</div>'; return; }
+  g.innerHTML = list.map(it => `
+    <div class="item-card" onclick="openModal('${it.id}')">
+      <div class="item-img">${it.icon}</div>
+      <div class="item-body">
+        <span class="item-status status-${it.status}">${it.status.charAt(0).toUpperCase()+it.status.slice(1)}</span>
+        <h4>${it.name}</h4>
+        <p>${it.desc.substring(0,90)}${it.desc.length>90?'...':''}</p>
+        <div class="item-meta">
+          <span>📍 ${it.loc}</span>
+          <button class="btn-sm" onclick="event.stopPropagation();openModal('${it.id}')">Details</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderDash() {
+  const tot = items.length, lost = items.filter(i=>i.status==='lost').length, found = items.filter(i=>i.status==='found').length, claimed = items.filter(i=>i.status==='claimed').length;
+  document.getElementById('d-total').textContent = tot;
+  document.getElementById('d-lost').textContent = lost;
+  document.getElementById('d-found').textContent = found;
+  document.getElementById('d-claimed').textContent = claimed;
+  document.getElementById('dashBody').innerHTML = items.map(it=>`
+    <tr>
+      <td><strong>${it.id}</strong></td>
+      <td>${it.icon} ${it.name}</td>
+      <td>${it.cat}</td>
+      <td><span class="item-status status-${it.status}" style="font-size:0.68rem">${it.status}</span></td>
+      <td>${it.loc}</td>
+      <td>${it.date}</td>
+      <td>${it.reporter}</td>
+      <td>
+        <select onchange="changeStatus('${it.id}',this.value)" style="font-size:0.75rem;padding:4px 6px;border-radius:6px;border:1px solid var(--border)">
+          <option ${it.status==='lost'?'selected':''} value="lost">Lost</option>
+          <option ${it.status==='found'?'selected':''} value="found">Found</option>
+          <option ${it.status==='claimed'?'selected':''} value="claimed">Claimed</option>
+        </select>
+      </td>
+    </tr>`).join('');
+}
+
+function updateStats() {
+  const total = items.length;
+  const claimed = items.filter(i=>i.status==='claimed').length;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-found').textContent = claimed;
+  document.getElementById('s-rate').textContent = total ? Math.round(claimed/total*100)+'%' : '0%';
+}
+
+// ── NAVIGATION ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('nav-'+name);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0,0);
+  if (name==='dashboard') renderDash();
+  if (name==='browse') renderGrid('browseGrid', getFiltered());
+}
+
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+// ── FILTERS ──
+function filterItems(status, el) {
+  statusFilter = status; catFilter = '';
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid('browseGrid', getFiltered());
+}
+
+function filterCategory(cat, el) {
+  catFilter = cat; statusFilter = 'all';
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid('browseGrid', getFiltered());
+}
+
+function doHeroSearch() {
+  searchFilter = document.getElementById('heroSearch').value.toLowerCase().trim();
+  showPage('browse');
+  renderGrid('browseGrid', getFiltered());
+}
+
+// ── FORM ──
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-lost').classList.toggle('active', tab==='lost');
+  document.getElementById('tab-found').classList.toggle('active', tab==='found');
+}
+
+function handlePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('photoPreview').innerHTML = `<img src="${e.target.result}" style="max-width:100%;border-radius:var(--radius-sm);margin-top:10px;border:1px solid var(--border)">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitItem() {
+  const name = document.getElementById('f-name').value.trim();
+  const cat = document.getElementById('f-cat').value;
+  const date = document.getElementById('f-date').value;
+  const loc = document.getElementById('f-loc').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+  if (!name || !cat || !date || !loc || !desc) { showToast('⚠️','Please fill in all required fields.'); return; }
+  const icons = {Electronics:'📱',Clothing:'👕',Accessories:'🎒',Documents:'📄',Keys:'🔑',Jewelry:'📿',Books:'📚',Other:'📦'};
+  const newItem = {
+    id: 'LF-'+ String(items.length+1).padStart(3,'0'),
+    name, cat, status: currentTab, loc, date, desc,
+    reporter: document.getElementById('f-reporter').value || 'Anonymous',
+    contact: document.getElementById('f-contact').value || 'Not provided',
+    icon: icons[cat] || '📦'
+  };
+  items.unshift(newItem);
+  ['f-name','f-loc','f-desc','f-reporter','f-contact'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-cat').value='';
+  document.getElementById('photoPreview').innerHTML='';
+  document.getElementById('f-date').valueAsDate = new Date();
+  renderAll(); updateStats();
+  showToast('✅', `Item reported successfully! ID: ${newItem.id}`);
+  setTimeout(()=>showPage('browse'), 1800);
+}
+
+// ── MODAL ──
+function openModal(id) {
+  currentItem = items.find(i=>i.id===id);
+  if (!currentItem) return;
+  document.getElementById('modalImg').textContent = currentItem.icon;
+  document.getElementById('modalStatus').innerHTML = `<span class="item-status status-${currentItem.status}">${currentItem.status.charAt(0).toUpperCase()+currentItem.status.slice(1)}</span>`;
+  document.getElementById('modalName').textContent = currentItem.name;
+  document.getElementById('modalMeta').textContent = `📍 ${currentItem.loc} · 📅 ${currentItem.date} · 🏷️ ${currentItem.cat}`;
+  document.getElementById('modalDetail').textContent = currentItem.desc;
+  document.getElementById('itemModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('itemModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function claimItem() {
+  if (!currentItem) return;
+  closeModal();
+  showToast('📧', `Contact: ${currentItem.contact} — Ref: ${currentItem.id}`);
+}
+
+// ── DASHBOARD ──
+function changeStatus(id, newStatus) {
+  const item = items.find(i=>i.id===id);
+  if (item) { item.status = newStatus; renderAll(); updateStats(); showToast('✅','Status updated to: '+newStatus); }
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(icon, msg) {
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, 4000);
+}
+function hideToast() { document.getElementById('toast').classList.remove('show'); }
+</script>
+</body>
+</html>
