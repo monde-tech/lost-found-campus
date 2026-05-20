@@ -35,7 +35,6 @@
     overflow-x: hidden;
   }
 
-  /* BG texture */
   body::before {
     content:'';
     position:fixed;
@@ -46,7 +45,6 @@
     z-index:0;
   }
 
-  /* NAV */
   nav {
     position:sticky;
     top:0;
@@ -61,527 +59,259 @@
     height:64px;
   }
 
-  .nav-logo {
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
+  .nav-logo { display:flex; align-items:center; gap:10px; }
   .nav-logo .icon {
     width:36px; height:36px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     font-size:18px;
   }
-  .nav-logo span {
-    font-family: 'Playfair Display', serif;
-    font-weight:700;
-    font-size:18px;
-    letter-spacing:-0.3px;
-  }
-  .nav-logo span em {
-    font-style:normal;
-    color: var(--accent);
-  }
+  .nav-logo span { font-family:'Playfair Display',serif; font-weight:700; font-size:18px; letter-spacing:-0.3px; }
+  .nav-logo span em { font-style:normal; color:var(--accent); }
 
-  .nav-tabs {
-    display:flex;
-    gap:4px;
-    background: var(--surface2);
-    border-radius:50px;
-    padding:4px;
-  }
+  .nav-tabs { display:flex; gap:4px; background:var(--surface2); border-radius:50px; padding:4px; }
   .nav-tab {
-    padding:7px 18px;
-    border-radius:50px;
-    border:none;
-    background:transparent;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size:14px;
-    font-weight:500;
-    cursor:pointer;
-    transition: all .2s;
-    white-space:nowrap;
+    padding:7px 18px; border-radius:50px; border:none;
+    background:transparent; color:var(--muted);
+    font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
+    cursor:pointer; transition:all .2s; white-space:nowrap;
   }
-  .nav-tab.active {
-    background: linear-gradient(135deg, var(--accent), #f0a500);
-    color: #0d0f14;
-    font-weight:600;
-  }
+  .nav-tab.active { background:linear-gradient(135deg,var(--accent),#f0a500); color:#0d0f14; font-weight:600; }
 
-  .hamburger {
-    display:none;
-    flex-direction:column;
-    gap:5px;
-    cursor:pointer;
-    background:none;
-    border:none;
-    padding:4px;
-  }
-  .hamburger span {
-    display:block;
-    width:22px; height:2px;
-    background: var(--text);
-    border-radius:2px;
-    transition:.3s;
-  }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+  .hamburger span { display:block; width:22px; height:2px; background:var(--text); border-radius:2px; transition:.3s; }
 
-  /* MOBILE NAV */
   .mobile-menu {
-    display:none;
-    position:fixed;
-    top:64px; left:0; right:0;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    z-index:99;
-    padding:16px;
-    flex-direction:column;
-    gap:8px;
+    display:none; position:fixed; top:64px; left:0; right:0;
+    background:var(--surface); border-bottom:1px solid var(--border);
+    z-index:99; padding:16px; flex-direction:column; gap:8px;
   }
   .mobile-menu.open { display:flex; }
   .mobile-menu .nav-tab { width:100%; text-align:center; border-radius:10px; }
 
-  /* PAGES */
   .page { display:none; padding:32px 24px; max-width:1100px; margin:0 auto; position:relative; z-index:1; }
   .page.active { display:block; }
 
-  /* HOME */
-  .hero {
-    text-align:center;
-    padding: 60px 0 40px;
-  }
+  .hero { text-align:center; padding:60px 0 40px; }
   .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
-    font-weight:900;
-    line-height:1.1;
-    margin-bottom:16px;
-    letter-spacing:-1px;
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2.2rem,5vw,3.8rem);
+    font-weight:900; line-height:1.1;
+    margin-bottom:16px; letter-spacing:-1px;
   }
   .hero h1 .gd {
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
   }
-  .hero p {
-    color: var(--muted);
-    font-size:17px;
-    max-width:520px;
-    margin:0 auto 40px;
-    line-height:1.7;
-  }
+  .hero p { color:var(--muted); font-size:17px; max-width:520px; margin:0 auto 40px; line-height:1.7; }
 
-  .hero-stats {
-    display:flex;
-    justify-content:center;
-    gap:16px;
-    flex-wrap:wrap;
-    margin-bottom:48px;
-  }
+  .hero-stats { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:48px; }
   .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 28px;
-    min-width:130px;
-    text-align:center;
-    transition: transform .2s;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:20px 28px; min-width:130px;
+    text-align:center; transition:transform .2s;
   }
-  .stat-card:hover { transform: translateY(-3px); }
-  .stat-card .num {
-    font-family: 'Playfair Display', serif;
-    font-size:2rem;
-    font-weight:900;
-    line-height:1;
-    margin-bottom:4px;
-  }
-  .stat-card .lbl { font-size:12px; color: var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:1px; }
+  .stat-card:hover { transform:translateY(-3px); }
+  .stat-card .num { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; line-height:1; margin-bottom:4px; }
+  .stat-card .lbl { font-size:12px; color:var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:1px; }
+  .stat-card.s-total .num { color:var(--text); }
+  .stat-card.s-lost .num { color:var(--lost); }
+  .stat-card.s-found .num { color:var(--found); }
+  .stat-card.s-claimed .num { color:var(--claimed); }
 
-  .stat-card.s-total .num { color: var(--text); }
-  .stat-card.s-lost .num { color: var(--lost); }
-  .stat-card.s-found .num { color: var(--found); }
-  .stat-card.s-claimed .num { color: var(--claimed); }
-
-  .search-bar-wrap {
-    display:flex;
-    gap:10px;
-    max-width:560px;
-    margin:0 auto 48px;
-  }
+  .search-bar-wrap { display:flex; gap:10px; max-width:560px; margin:0 auto 48px; }
   .search-bar-wrap input {
-    flex:1;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius:50px;
-    padding: 14px 22px;
-    color: var(--text);
-    font-size:15px;
-    font-family: 'DM Sans', sans-serif;
-    outline:none;
-    transition: border-color .2s;
+    flex:1; background:var(--surface); border:1px solid var(--border);
+    border-radius:50px; padding:14px 22px; color:var(--text);
+    font-size:15px; font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s;
   }
-  .search-bar-wrap input:focus { border-color: var(--accent); }
-  .search-bar-wrap input::placeholder { color: var(--muted); }
+  .search-bar-wrap input:focus { border-color:var(--accent); }
+  .search-bar-wrap input::placeholder { color:var(--muted); }
 
-  /* HOW IT WORKS */
   .how-section { margin-bottom:48px; }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size:1.6rem;
-    font-weight:700;
-    margin-bottom:24px;
-    text-align:center;
-  }
-  .flow-steps {
-    display:flex;
-    gap:0;
-    flex-wrap:wrap;
-    justify-content:center;
-    align-items:center;
-  }
+  .section-title { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; margin-bottom:24px; text-align:center; }
+  .flow-steps { display:flex; gap:0; flex-wrap:wrap; justify-content:center; align-items:center; }
   .flow-step {
-    display:flex;
-    align-items:center;
-    gap:12px;
-    background: var(--surface);
-    border:1px solid var(--border);
-    border-radius: var(--radius);
-    padding:16px 20px;
-    min-width:130px;
+    display:flex; align-items:center; gap:12px;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:16px 20px; min-width:130px;
   }
   .flow-step .step-num {
-    width:34px; height:34px;
-    border-radius:50%;
-    background: linear-gradient(135deg, var(--accent), #f0a500);
-    color:#0d0f14;
-    font-weight:700;
-    font-size:14px;
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
+    width:34px; height:34px; border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),#f0a500);
+    color:#0d0f14; font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
   .flow-step .step-txt { font-size:13px; font-weight:500; }
-  .flow-arrow { font-size:20px; color: var(--muted); padding:0 8px; }
+  .flow-arrow { font-size:20px; color:var(--muted); padding:0 8px; }
 
-  /* QUICK ACTIONS */
-  .quick-actions {
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:16px;
-    max-width:560px;
-    margin:0 auto;
-  }
+  .quick-actions { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:560px; margin:0 auto; }
   .action-card {
-    border-radius: var(--radius);
-    padding:28px 24px;
-    cursor:pointer;
-    transition: transform .2s, box-shadow .2s;
-    border:none;
-    text-align:left;
-    font-family: 'DM Sans', sans-serif;
-    position:relative;
-    overflow:hidden;
+    border-radius:var(--radius); padding:28px 24px; cursor:pointer;
+    transition:transform .2s, box-shadow .2s; border:none; text-align:left;
+    font-family:'DM Sans',sans-serif; position:relative; overflow:hidden;
   }
-  .action-card:hover { transform:translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
-  .action-card.lost-card { background: linear-gradient(135deg, rgba(255,77,109,0.2), rgba(255,77,109,0.06)); border:1px solid rgba(255,77,109,0.3); }
-  .action-card.found-card { background: linear-gradient(135deg, rgba(34,197,94,0.2), rgba(34,197,94,0.06)); border:1px solid rgba(34,197,94,0.3); }
+  .action-card:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,0.4); }
+  .action-card.lost-card { background:linear-gradient(135deg,rgba(255,77,109,0.2),rgba(255,77,109,0.06)); border:1px solid rgba(255,77,109,0.3); }
+  .action-card.found-card { background:linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.06)); border:1px solid rgba(34,197,94,0.3); }
   .action-card .ac-icon { font-size:2rem; margin-bottom:12px; display:block; }
-  .action-card .ac-title { font-size:16px; font-weight:700; color: var(--text); margin-bottom:6px; }
-  .action-card .ac-desc { font-size:13px; color: var(--muted); line-height:1.5; }
+  .action-card .ac-title { font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; }
+  .action-card .ac-desc { font-size:13px; color:var(--muted); line-height:1.5; }
 
-  /* REPORT FORM */
   .form-tabs {
-    display:flex;
-    gap:0;
-    background: var(--surface2);
-    border-radius:12px;
-    padding:4px;
-    max-width:400px;
-    margin:0 auto 32px;
+    display:flex; gap:0; background:var(--surface2); border-radius:12px;
+    padding:4px; max-width:400px; margin:0 auto 32px;
   }
   .form-tab-btn {
-    flex:1;
-    padding:11px;
-    border-radius:9px;
-    border:none;
-    background:transparent;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.2s;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
+    flex:1; padding:11px; border-radius:9px; border:none; background:transparent;
+    color:var(--muted); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; transition:.2s; display:flex; align-items:center; justify-content:center; gap:6px;
   }
-  .form-tab-btn.active.lost-tab { background: var(--lost-bg); color: var(--lost); border:1px solid var(--lost); }
-  .form-tab-btn.active.found-tab { background: var(--found-bg); color: var(--found); border:1px solid var(--found); }
+  .form-tab-btn.active.lost-tab { background:var(--lost-bg); color:var(--lost); border:1px solid var(--lost); }
+  .form-tab-btn.active.found-tab { background:var(--found-bg); color:var(--found); border:1px solid var(--found); }
 
   .form-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 32px;
-    max-width: 640px;
-    margin:0 auto;
-    box-shadow: var(--shadow);
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:18px; padding:32px; max-width:640px; margin:0 auto; box-shadow:var(--shadow);
   }
 
   .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .form-group { margin-bottom:20px; }
   .form-group label {
-    display:block;
-    font-size:13px;
-    font-weight:600;
-    color: var(--muted);
-    text-transform:uppercase;
-    letter-spacing:.8px;
-    margin-bottom:8px;
+    display:block; font-size:13px; font-weight:600; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px;
   }
   .form-group input,
   .form-group select,
   .form-group textarea {
-    width:100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius:10px;
-    padding:12px 16px;
-    color: var(--text);
-    font-size:15px;
-    font-family: 'DM Sans', sans-serif;
-    outline:none;
-    transition: border-color .2s;
+    width:100%; background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:12px 16px; color:var(--text);
+    font-size:15px; font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s;
     -webkit-appearance:none;
   }
   .form-group input:focus,
   .form-group select:focus,
-  .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea:focus { border-color:var(--accent); }
   .form-group textarea { resize:vertical; min-height:100px; }
-  .form-group select option { background: var(--surface2); }
+  .form-group select option { background:var(--surface2); }
 
-  .form-error { font-size:12px; color: var(--lost); margin-top:5px; display:none; }
+  .form-error { font-size:12px; color:var(--lost); margin-top:5px; display:none; }
   .form-group.has-error input,
   .form-group.has-error select,
-  .form-group.has-error textarea { border-color: var(--lost); }
+  .form-group.has-error textarea { border-color:var(--lost); }
   .form-group.has-error .form-error { display:block; }
 
   .photo-drop {
-    border:2px dashed var(--border);
-    border-radius:12px;
-    padding:32px;
-    text-align:center;
-    cursor:pointer;
-    transition:.2s;
+    border:2px dashed var(--border); border-radius:12px; padding:32px;
+    text-align:center; cursor:pointer; transition:.2s;
   }
-  .photo-drop:hover { border-color: var(--accent); background: rgba(245,197,24,0.03); }
+  .photo-drop:hover { border-color:var(--accent); background:rgba(245,197,24,0.03); }
   .photo-drop .drop-icon { font-size:2rem; margin-bottom:8px; }
-  .photo-drop p { font-size:13px; color: var(--muted); }
+  .photo-drop p { font-size:13px; color:var(--muted); }
   .photo-drop input { display:none; }
   .photo-preview { width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-top:12px; display:none; }
 
   .btn-primary {
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    border:none;
-    background: linear-gradient(135deg, var(--accent), #f0a500);
-    color:#0d0f14;
-    font-family: 'DM Sans', sans-serif;
-    font-size:16px;
-    font-weight:700;
-    cursor:pointer;
-    transition: transform .15s, box-shadow .15s;
-    letter-spacing:.3px;
+    width:100%; padding:14px; border-radius:12px; border:none;
+    background:linear-gradient(135deg,var(--accent),#f0a500);
+    color:#0d0f14; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:700;
+    cursor:pointer; transition:transform .15s, box-shadow .15s; letter-spacing:.3px;
   }
   .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,197,24,0.3); }
   .btn-primary:active { transform:none; }
 
-  /* BROWSE */
-  .browse-controls {
-    display:flex;
-    gap:12px;
-    align-items:center;
-    flex-wrap:wrap;
-    margin-bottom:24px;
-  }
+  .browse-controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:24px; }
   .browse-search {
-    flex:1;
-    min-width:200px;
-    background: var(--surface);
-    border:1px solid var(--border);
-    border-radius:50px;
-    padding:11px 20px;
-    color: var(--text);
-    font-size:14px;
-    font-family: 'DM Sans', sans-serif;
-    outline:none;
-    transition: border-color .2s;
+    flex:1; min-width:200px; background:var(--surface); border:1px solid var(--border);
+    border-radius:50px; padding:11px 20px; color:var(--text); font-size:14px;
+    font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s;
   }
-  .browse-search:focus { border-color: var(--accent); }
-  .browse-search::placeholder { color: var(--muted); }
+  .browse-search:focus { border-color:var(--accent); }
+  .browse-search::placeholder { color:var(--muted); }
 
-  .filter-chips {
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-  }
+  .filter-chips { display:flex; gap:8px; flex-wrap:wrap; }
   .chip {
-    padding:7px 14px;
-    border-radius:50px;
-    border:1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-size:13px;
-    font-weight:500;
-    cursor:pointer;
-    transition:.2s;
-    white-space:nowrap;
+    padding:7px 14px; border-radius:50px; border:1px solid var(--border);
+    background:var(--surface); color:var(--muted); font-size:13px; font-weight:500;
+    cursor:pointer; transition:.2s; white-space:nowrap;
   }
-  .chip:hover { border-color: var(--accent); color: var(--accent); }
-  .chip.active { background: var(--accent); color:#0d0f14; border-color: var(--accent); font-weight:600; }
-  .chip.lost-chip.active { background: var(--lost); border-color: var(--lost); color:#fff; }
-  .chip.found-chip.active { background: var(--found); border-color: var(--found); color:#fff; }
-  .chip.claimed-chip.active { background: var(--claimed); border-color: var(--claimed); color:#fff; }
+  .chip:hover { border-color:var(--accent); color:var(--accent); }
+  .chip.active { background:var(--accent); color:#0d0f14; border-color:var(--accent); font-weight:600; }
+  .chip.lost-chip.active { background:var(--lost); border-color:var(--lost); color:#fff; }
+  .chip.found-chip.active { background:var(--found); border-color:var(--found); color:#fff; }
+  .chip.claimed-chip.active { background:var(--claimed); border-color:var(--claimed); color:#fff; }
 
-  .items-grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap:16px;
-  }
-
+  .items-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
   .item-card {
-    background: var(--surface);
-    border:1px solid var(--border);
-    border-radius: var(--radius);
-    overflow:hidden;
-    cursor:pointer;
-    transition: transform .2s, box-shadow .2s;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); overflow:hidden; cursor:pointer;
+    transition:transform .2s, box-shadow .2s;
   }
-  .item-card:hover { transform:translateY(-4px); box-shadow: var(--shadow); }
+  .item-card:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
   .item-img {
-    width:100%;
-    height:160px;
-    object-fit:cover;
-    background: var(--surface2);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:3rem;
+    width:100%; height:160px; object-fit:cover; background:var(--surface2);
+    display:flex; align-items:center; justify-content:center; font-size:3rem;
   }
   .item-img img { width:100%; height:100%; object-fit:cover; }
   .item-body { padding:16px; }
-  .item-header {
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:8px;
-    margin-bottom:8px;
-  }
+  .item-header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
   .item-name { font-weight:700; font-size:15px; line-height:1.3; }
   .badge {
-    padding:3px 10px;
-    border-radius:50px;
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.7px;
-    white-space:nowrap;
-    flex-shrink:0;
+    padding:3px 10px; border-radius:50px; font-size:11px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.7px; white-space:nowrap; flex-shrink:0;
   }
-  .badge-lost { background: var(--lost-bg); color: var(--lost); border:1px solid var(--lost); }
-  .badge-found { background: var(--found-bg); color: var(--found); border:1px solid var(--found); }
-  .badge-claimed { background: var(--claimed-bg); color: var(--claimed); border:1px solid var(--claimed); }
-  .item-meta { font-size:12px; color: var(--muted); display:flex; gap:12px; flex-wrap:wrap; }
-  .item-desc { font-size:13px; color: var(--muted); margin-top:8px; line-height:1.5; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .badge-lost { background:var(--lost-bg); color:var(--lost); border:1px solid var(--lost); }
+  .badge-found { background:var(--found-bg); color:var(--found); border:1px solid var(--found); }
+  .badge-claimed { background:var(--claimed-bg); color:var(--claimed); border:1px solid var(--claimed); }
+  .item-meta { font-size:12px; color:var(--muted); display:flex; gap:12px; flex-wrap:wrap; }
+  .item-desc { font-size:13px; color:var(--muted); margin-top:8px; line-height:1.5; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
 
-  .empty-state { text-align:center; padding:80px 20px; color: var(--muted); }
+  .empty-state { text-align:center; padding:80px 20px; color:var(--muted); }
   .empty-state .ei { font-size:3rem; margin-bottom:16px; }
   .empty-state p { font-size:15px; }
 
-  /* ADMIN */
   .admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:16px; }
   .admin-header h2 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; }
   .btn-danger {
-    padding:10px 20px;
-    border-radius:10px;
-    border:1px solid var(--lost);
-    background: var(--lost-bg);
-    color: var(--lost);
-    font-family:'DM Sans',sans-serif;
-    font-size:13px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.2s;
+    padding:10px 20px; border-radius:10px; border:1px solid var(--lost);
+    background:var(--lost-bg); color:var(--lost); font-family:'DM Sans',sans-serif;
+    font-size:13px; font-weight:600; cursor:pointer; transition:.2s;
   }
-  .btn-danger:hover { background: var(--lost); color:#fff; }
+  .btn-danger:hover { background:var(--lost); color:#fff; }
 
   .admin-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:32px; }
-  .admin-stat {
-    background: var(--surface);
-    border:1px solid var(--border);
-    border-radius: var(--radius);
-    padding:20px;
-    text-align:center;
-  }
+  .admin-stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-align:center; }
   .admin-stat .as-num { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; }
-  .admin-stat .as-lbl { font-size:11px; color: var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+  .admin-stat .as-lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
 
-  .admin-table-wrap { overflow-x:auto; border-radius: var(--radius); border:1px solid var(--border); }
+  .admin-table-wrap { overflow-x:auto; border-radius:var(--radius); border:1px solid var(--border); }
   table { width:100%; border-collapse:collapse; }
   th {
-    background: var(--surface2);
-    padding:12px 16px;
-    text-align:left;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:1px;
-    color: var(--muted);
-    font-weight:600;
-    white-space:nowrap;
+    background:var(--surface2); padding:12px 16px; text-align:left;
+    font-size:11px; text-transform:uppercase; letter-spacing:1px;
+    color:var(--muted); font-weight:600; white-space:nowrap;
   }
-  td {
-    padding:14px 16px;
-    border-top:1px solid var(--border);
-    font-size:14px;
-    vertical-align:middle;
-  }
-  tr:hover td { background: var(--surface2); }
+  td { padding:14px 16px; border-top:1px solid var(--border); font-size:14px; vertical-align:middle; }
+  tr:hover td { background:var(--surface2); }
   .status-select {
-    background: var(--surface2);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:6px 10px;
-    color: var(--text);
-    font-family:'DM Sans',sans-serif;
-    font-size:13px;
-    font-weight:600;
-    cursor:pointer;
-    outline:none;
+    background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+    padding:6px 10px; color:var(--text); font-family:'DM Sans',sans-serif;
+    font-size:13px; font-weight:600; cursor:pointer; outline:none;
   }
   .btn-delete {
-    background:none;
-    border:none;
-    color: var(--muted);
-    cursor:pointer;
-    font-size:16px;
-    padding:4px 8px;
-    border-radius:6px;
-    transition:.2s;
+    background:none; border:none; color:var(--muted); cursor:pointer;
+    font-size:16px; padding:4px 8px; border-radius:6px; transition:.2s;
   }
-  .btn-delete:hover { color: var(--lost); background: var(--lost-bg); }
+  .btn-delete:hover { color:var(--lost); background:var(--lost-bg); }
 
-  /* MODAL */
+  /* ── MODAL FIXES ─────────────────────────────────────────────────────── */
   .modal-overlay {
     display:none;
     position:fixed;
     inset:0;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(8px);
+    background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(8px);
     z-index:200;
     align-items:center;
     justify-content:center;
@@ -589,87 +319,61 @@
   }
   .modal-overlay.open { display:flex; }
   .modal {
-    background: var(--surface);
+    background:var(--surface);
     border:1px solid var(--border);
     border-radius:20px;
     max-width:520px;
     width:100%;
     max-height:90vh;
     overflow-y:auto;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-    animation: modalIn .25s ease;
+    box-shadow:0 24px 80px rgba(0,0,0,0.6);
+    animation:modalIn .25s ease;
+    /* prevent clicks inside modal from bubbling to overlay */
+    position:relative;
   }
-  @keyframes modalIn { from { transform: scale(.95) translateY(20px); opacity:0; } to { transform:none; opacity:1; } }
+  @keyframes modalIn { from { transform:scale(.95) translateY(20px); opacity:0; } to { transform:none; opacity:1; } }
   .modal-img {
-    width:100%;
-    height:220px;
-    object-fit:cover;
-    border-radius:18px 18px 0 0;
-    background: var(--surface2);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:5rem;
+    width:100%; height:220px; object-fit:cover;
+    border-radius:18px 18px 0 0; background:var(--surface2);
+    display:flex; align-items:center; justify-content:center; font-size:5rem;
+    overflow:hidden;
   }
   .modal-img img { width:100%; height:100%; object-fit:cover; border-radius:18px 18px 0 0; }
   .modal-body { padding:28px; }
   .modal-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; margin-bottom:16px; line-height:1.2; }
   .modal-detail { display:flex; gap:8px; margin-bottom:10px; font-size:14px; }
-  .modal-detail .dl { color: var(--muted); font-weight:500; min-width:90px; }
-  .modal-detail .dv { color: var(--text); }
-  .modal-desc { background: var(--surface2); border-radius:10px; padding:14px; margin:16px 0; font-size:14px; line-height:1.7; color: var(--muted); }
+  .modal-detail .dl { color:var(--muted); font-weight:500; min-width:90px; }
+  .modal-detail .dv { color:var(--text); }
+  .modal-desc { background:var(--surface2); border-radius:10px; padding:14px; margin:16px 0; font-size:14px; line-height:1.7; color:var(--muted); }
   .modal-actions { display:flex; gap:10px; margin-top:20px; }
   .btn-contact {
-    flex:1;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    background: linear-gradient(135deg, var(--accent), #f0a500);
-    color:#0d0f14;
-    font-family:'DM Sans',sans-serif;
-    font-weight:700;
-    font-size:14px;
-    cursor:pointer;
-    transition:.2s;
+    flex:1; padding:12px; border-radius:10px; border:none;
+    background:linear-gradient(135deg,var(--accent),#f0a500);
+    color:#0d0f14; font-family:'DM Sans',sans-serif;
+    font-weight:700; font-size:14px; cursor:pointer; transition:.2s;
   }
   .btn-contact:hover { transform:translateY(-2px); }
+  .btn-contact:disabled { opacity:0.7; cursor:not-allowed; transform:none; }
   .btn-close-modal {
-    padding:12px 20px;
-    border-radius:10px;
-    border:1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    font-family:'DM Sans',sans-serif;
-    font-weight:600;
-    font-size:14px;
-    cursor:pointer;
-    transition:.2s;
+    padding:12px 20px; border-radius:10px; border:1px solid var(--border);
+    background:var(--surface2); color:var(--text); font-family:'DM Sans',sans-serif;
+    font-weight:600; font-size:14px; cursor:pointer; transition:.2s;
   }
-  .btn-close-modal:hover { border-color: var(--muted); }
+  .btn-close-modal:hover { border-color:var(--muted); background:var(--surface); }
 
-  /* TOAST */
   .toast {
-    position:fixed;
-    bottom:24px;
-    left:50%;
+    position:fixed; bottom:24px; left:50%;
     transform:translateX(-50%) translateY(100px);
-    background: var(--surface);
-    border:1px solid var(--border);
-    border-radius:50px;
-    padding:12px 24px;
-    font-size:14px;
-    font-weight:500;
-    z-index:300;
-    box-shadow: var(--shadow);
-    transition: transform .3s cubic-bezier(0.34,1.56,0.64,1);
-    white-space:nowrap;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:50px; padding:12px 24px; font-size:14px; font-weight:500;
+    z-index:300; box-shadow:var(--shadow);
+    transition:transform .3s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap;
   }
   .toast.show { transform:translateX(-50%) translateY(0); }
-  .toast.success { border-color: var(--found); color: var(--found); }
-  .toast.error { border-color: var(--lost); color: var(--lost); }
-  .toast.info { border-color: var(--claimed); color: var(--claimed); }
+  .toast.success { border-color:var(--found); color:var(--found); }
+  .toast.error { border-color:var(--lost); color:var(--lost); }
+  .toast.info { border-color:var(--claimed); color:var(--claimed); }
 
-  /* RESPONSIVE */
   @media (max-width:768px) {
     .nav-tabs { display:none; }
     .hamburger { display:flex; }
@@ -689,7 +393,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <div class="icon">🎓</div>
@@ -900,7 +603,7 @@
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+<div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modalBox">
     <div class="modal-img" id="modalImg"></div>
     <div class="modal-body">
@@ -909,54 +612,128 @@
       <div class="modal-desc" id="modalDesc"></div>
       <div class="modal-actions">
         <button class="btn-contact" id="modalContactBtn">📞 Contact / Claim</button>
-        <button class="btn-close-modal" onclick="closeModalDirect()">Close</button>
+        <button class="btn-close-modal" id="modalCloseBtn">✕ Close</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STATE ──────────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'clf_items_v2';
 let items = [];
 let activeFilter = 'all';
 let activeCat = 'all';
 let activeFormTab = 'lost';
 
-// ── STORAGE ────────────────────────────────────────────────────────────────
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
 function load() {
   try { items = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { items = []; }
 }
+
+// ── MODAL (fixed) ──────────────────────────────────────────────────────────
+function openModal(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+
+  const overlay = document.getElementById('modalOverlay');
+  const imgEl   = document.getElementById('modalImg');
+
+  imgEl.innerHTML = item.photo
+    ? `<img src="${item.photo}" alt="${esc(item.name)}">`
+    : categoryEmoji(item.category);
+
+  document.getElementById('modalTitle').innerHTML =
+    `${esc(item.name)} <span class="badge badge-${item.status}" style="font-size:13px;vertical-align:middle">${item.status}</span>`;
+
+  document.getElementById('modalMeta').innerHTML = `
+    <div class="modal-detail"><span class="dl">Category</span><span class="dv">📁 ${esc(item.category)}</span></div>
+    <div class="modal-detail"><span class="dl">Location</span><span class="dv">📍 ${esc(item.location)}</span></div>
+    <div class="modal-detail"><span class="dl">Date</span><span class="dv">📅 ${formatDate(item.date)}</span></div>
+    ${item.contact ? `<div class="modal-detail"><span class="dl">Contact</span><span class="dv">📞 ${esc(item.contact)}</span></div>` : ''}
+  `;
+
+  document.getElementById('modalDesc').textContent = item.description;
+
+  const btn = document.getElementById('modalContactBtn');
+  if (item.status === 'claimed') {
+    btn.textContent = '✅ Already Claimed';
+    btn.disabled = true;
+  } else {
+    btn.disabled = false;
+    btn.textContent = item.status === 'lost' ? '🙌 I Found This Item' : '🎉 Claim This Item';
+  }
+
+  btn.onclick = () => {
+    if (item.status === 'claimed') return;
+    if (item.contact) {
+      if (!confirm(`Contact this person?\n\n${item.contact}`)) return;
+      if (item.contact.includes('@')) window.location.href = `mailto:${item.contact}`;
+      else window.location.href = `tel:${item.contact}`;
+    } else {
+      if (!confirm('Mark this item as claimed?')) return;
+    }
+    item.status = 'claimed';
+    save(); renderBrowse(); renderAdmin(); updateStats();
+    closeModal();
+    showToast('🔵 Item marked as claimed!', 'info');
+  };
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// Single close function — handles both button and overlay-click
+function closeModal(e) {
+  // If called from overlay click, only close when clicking the overlay itself (not inner modal)
+  if (e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Wire up close button and overlay click after DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('modalCloseBtn').addEventListener('click', () => closeModal());
+  document.getElementById('modalOverlay').addEventListener('click', (e) => closeModal(e));
+  // Prevent clicks inside the modal box from bubbling to overlay
+  document.getElementById('modalBox').addEventListener('click', (e) => e.stopPropagation());
+
+  document.getElementById('f-date').valueAsDate = new Date();
+  load();
+  updateStats();
+  renderBrowse();
+});
+
+// Keyboard close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
 
 // ── NAV ────────────────────────────────────────────────────────────────────
 function showPage(p) {
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  document.querySelectorAll('.nav-tab, .mobile-menu .nav-tab').forEach(el => {
-    if(el.textContent.toLowerCase().includes(p === 'home' ? '🏠' : p === 'report' ? '📋' : p === 'browse' ? '🔍' : '⚙️')) el.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(el => {
+    const map = {home:'🏠',report:'📋',browse:'🔍',admin:'⚙️'};
+    if(el.textContent.includes(map[p])) el.classList.add('active');
   });
-  if(p === 'browse') renderBrowse();
-  if(p === 'admin') renderAdmin();
-  if(p === 'home') updateStats();
+  if(p==='browse') renderBrowse();
+  if(p==='admin')  renderAdmin();
+  if(p==='home')   updateStats();
   window.scrollTo(0,0);
 }
-
 function toggleMobile() { document.getElementById('mobileMenu').classList.toggle('open'); }
-function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
+function closeMobile()  { document.getElementById('mobileMenu').classList.remove('open'); }
 
-// ── FORM TAB ───────────────────────────────────────────────────────────────
+// ── FORM ───────────────────────────────────────────────────────────────────
 function setFormTab(t) {
   activeFormTab = t;
-  document.getElementById('tabLost').classList.toggle('active', t === 'lost');
-  document.getElementById('tabFound').classList.toggle('active', t === 'found');
+  document.getElementById('tabLost').classList.toggle('active', t==='lost');
+  document.getElementById('tabFound').classList.toggle('active', t==='found');
 }
 
-// ── PHOTO PREVIEW ──────────────────────────────────────────────────────────
 function previewPhoto(input) {
   const preview = document.getElementById('photoPreview');
   if(input.files && input.files[0]) {
@@ -966,7 +743,6 @@ function previewPhoto(input) {
   }
 }
 
-// ── FORM VALIDATION & SUBMIT ───────────────────────────────────────────────
 function validateField(id, groupId) {
   const val = document.getElementById(id).value.trim();
   document.getElementById(groupId).classList.toggle('has-error', !val);
@@ -982,13 +758,13 @@ function submitReport() {
     validateField('f-desc','fg-desc')
   ].every(Boolean);
 
-  if(!ok) { showToast('Please fill in all required fields.', 'error'); return; }
+  if(!ok) { showToast('Please fill in all required fields.','error'); return; }
 
   let photo = '';
   const preview = document.getElementById('photoPreview');
-  if(preview.style.display === 'block') photo = preview.src;
+  if(preview.style.display==='block') photo = preview.src;
 
-  const item = {
+  items.unshift({
     id: Date.now().toString(),
     status: activeFormTab,
     name: document.getElementById('f-name').value.trim(),
@@ -999,72 +775,65 @@ function submitReport() {
     contact: document.getElementById('f-contact').value.trim(),
     photo,
     createdAt: new Date().toISOString()
-  };
+  });
 
-  items.unshift(item);
-  save();
-  resetForm();
-  updateStats();
-  showToast('✅ Report submitted successfully!', 'success');
+  save(); resetForm(); updateStats();
+  showToast('✅ Report submitted successfully!','success');
   setTimeout(() => showPage('browse'), 1200);
 }
 
 function resetForm() {
   ['f-name','f-category','f-date','f-location','f-desc','f-contact'].forEach(id => {
     const el = document.getElementById(id);
-    el.value = '';
+    el.value='';
     const fg = el.closest('.form-group');
     if(fg) fg.classList.remove('has-error');
   });
   const preview = document.getElementById('photoPreview');
-  preview.src = ''; preview.style.display = 'none';
-  document.getElementById('f-photo').value = '';
+  preview.src=''; preview.style.display='none';
+  document.getElementById('f-photo').value='';
 }
 
 // ── STATS ──────────────────────────────────────────────────────────────────
 function updateStats() {
-  const t = items.length;
-  const l = items.filter(i=>i.status==='lost').length;
-  const f = items.filter(i=>i.status==='found').length;
-  const c = items.filter(i=>i.status==='claimed').length;
-  document.getElementById('statTotal').textContent = t;
-  document.getElementById('statLost').textContent = l;
-  document.getElementById('statFound').textContent = f;
-  document.getElementById('statClaimed').textContent = c;
+  const t=items.length, l=items.filter(i=>i.status==='lost').length,
+        f=items.filter(i=>i.status==='found').length, c=items.filter(i=>i.status==='claimed').length;
+  document.getElementById('statTotal').textContent=t;
+  document.getElementById('statLost').textContent=l;
+  document.getElementById('statFound').textContent=f;
+  document.getElementById('statClaimed').textContent=c;
 }
 
 // ── BROWSE ─────────────────────────────────────────────────────────────────
-function setFilter(f, el) {
-  activeFilter = f;
-  document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
+function setFilter(f,el) {
+  activeFilter=f;
+  document.querySelectorAll('.filter-chips .chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   renderBrowse();
 }
-function setCat(c, el) {
-  activeCat = c;
-  document.querySelectorAll('#catChips .chip').forEach(ch => ch.classList.remove('active'));
+function setCat(c,el) {
+  activeCat=c;
+  document.querySelectorAll('#catChips .chip').forEach(ch=>ch.classList.remove('active'));
   el.classList.add('active');
   renderBrowse();
 }
 
 function renderBrowse() {
-  const query = (document.getElementById('browseSearch').value || '').toLowerCase();
-  let filtered = items.filter(item => {
-    const matchStatus = activeFilter === 'all' || item.status === activeFilter;
-    const matchCat = activeCat === 'all' || item.category === activeCat;
-    const matchQ = !query || item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query) || item.location.toLowerCase().includes(query) || item.category.toLowerCase().includes(query);
-    return matchStatus && matchCat && matchQ;
+  const query=(document.getElementById('browseSearch').value||'').toLowerCase();
+  const filtered=items.filter(item=>{
+    const matchStatus=activeFilter==='all'||item.status===activeFilter;
+    const matchCat=activeCat==='all'||item.category===activeCat;
+    const matchQ=!query||item.name.toLowerCase().includes(query)||item.description.toLowerCase().includes(query)||item.location.toLowerCase().includes(query)||item.category.toLowerCase().includes(query);
+    return matchStatus&&matchCat&&matchQ;
   });
-
-  const grid = document.getElementById('browseGrid');
+  const grid=document.getElementById('browseGrid');
   if(!filtered.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="ei">🔍</div><p>No items found. Try a different filter.</p></div>`;
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="ei">🔍</div><p>No items found. Try a different filter.</p></div>`;
     return;
   }
-
-  grid.innerHTML = filtered.map(item => `
+  grid.innerHTML=filtered.map(item=>`
     <div class="item-card" onclick="openModal('${item.id}')">
-      <div class="item-img">${item.photo ? `<img src="${item.photo}" alt="${item.name}">` : categoryEmoji(item.category)}</div>
+      <div class="item-img">${item.photo?`<img src="${item.photo}" alt="${esc(item.name)}">`:categoryEmoji(item.category)}</div>
       <div class="item-body">
         <div class="item-header">
           <div class="item-name">${esc(item.name)}</div>
@@ -1081,171 +850,27 @@ function renderBrowse() {
   `).join('');
 }
 
-
-// ── MODAL ──────────────────────────────────────────────────────────────────
-function openModal(id) {
-  const item = items.find(i => i.id === id);
-  if (!item) return;
-
-  const overlay = document.getElementById('modalOverlay');
-  const imgEl = document.getElementById('modalImg');
-
-  imgEl.innerHTML = item.photo
-    ? `<img src="${item.photo}" alt="${item.name}">`
-    : `<span style="font-size:4rem">${categoryEmoji(item.category)}</span>`;
-
-  document.getElementById('modalTitle').innerHTML = `
-    ${esc(item.name)}
-    <span class="badge badge-${item.status}" style="font-size:13px;vertical-align:middle">
-      ${item.status}
-    </span>
-  `;
-
-  document.getElementById('modalMeta').innerHTML = `
-    <div class="modal-detail">
-      <span class="dl">Category</span>
-      <span class="dv">📁 ${esc(item.category)}</span>
-    </div>
-
-    <div class="modal-detail">
-      <span class="dl">Location</span>
-      <span class="dv">📍 ${esc(item.location)}</span>
-    </div>
-
-    <div class="modal-detail">
-      <span class="dl">Date</span>
-      <span class="dv">📅 ${formatDate(item.date)}</span>
-    </div>
-
-    ${
-      item.contact
-        ? `
-        <div class="modal-detail">
-          <span class="dl">Contact</span>
-          <span class="dv">📞 ${esc(item.contact)}</span>
-        </div>
-      `
-        : ''
-    }
-  `;
-
-  document.getElementById('modalDesc').textContent = item.description;
-
-  const btn = document.getElementById('modalContactBtn');
-
-  // BUTTON TEXT
-  if (item.status === 'claimed') {
-    btn.textContent = '✅ Already Claimed';
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-    btn.style.cursor = 'not-allowed';
-  } else {
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    btn.style.cursor = 'pointer';
-
-    // LOST ITEM
-    if (item.status === 'lost') {
-      btn.textContent = '🙌 I Found This Item';
-    }
-
-    // FOUND ITEM
-    else if (item.status === 'found') {
-      btn.textContent = '🎉 Claim This Item';
-    }
-  }
-
-  // BUTTON ACTION
-  btn.onclick = () => {
-
-    // already claimed
-    if (item.status === 'claimed') return;
-
-    // if contact exists → contact owner
-    if (item.contact) {
-
-      const confirmClaim = confirm(
-        `Contact this person?\n\n${item.contact}`
-      );
-
-      if (confirmClaim) {
-
-        // EMAIL
-        if (item.contact.includes('@')) {
-          window.location.href = `mailto:${item.contact}`;
-        }
-
-        // PHONE
-        else {
-          window.location.href = `tel:${item.contact}`;
-        }
-
-        // MARK CLAIMED
-        item.status = 'claimed';
-
-        save();
-        renderBrowse();
-        renderAdmin();
-        updateStats();
-
-        closeModalDirect();
-
-        showToast('🔵 Item successfully claimed!', 'info');
-      }
-
-    } else {
-
-      // no contact
-      const ok = confirm(
-        'Mark this item as claimed?'
-      );
-
-      if (ok) {
-        item.status = 'claimed';
-
-        save();
-        renderBrowse();
-        renderAdmin();
-        updateStats();
-
-        closeModalDirect();
-
-        showToast('🔵 Item marked as claimed!', 'info');
-      }
-    }
-  };
-
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-
 // ── ADMIN ──────────────────────────────────────────────────────────────────
 function renderAdmin() {
-  const t = items.length;
-  const l = items.filter(i=>i.status==='lost').length;
-  const f = items.filter(i=>i.status==='found').length;
-  const c = items.filter(i=>i.status==='claimed').length;
-  const rate = t ? Math.round((c/t)*100) : 0;
-  document.getElementById('aTotal').textContent = t;
-  document.getElementById('aLost').textContent = l;
-  document.getElementById('aFound').textContent = f;
-  document.getElementById('aClaimed').textContent = c;
-  document.getElementById('aRate').textContent = rate+'%';
+  const t=items.length, l=items.filter(i=>i.status==='lost').length,
+        f=items.filter(i=>i.status==='found').length, c=items.filter(i=>i.status==='claimed').length;
+  const rate=t?Math.round((c/t)*100):0;
+  document.getElementById('aTotal').textContent=t;
+  document.getElementById('aLost').textContent=l;
+  document.getElementById('aFound').textContent=f;
+  document.getElementById('aClaimed').textContent=c;
+  document.getElementById('aRate').textContent=rate+'%';
 
-  const tbody = document.getElementById('adminTbody');
-  if(!items.length) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px">No items yet.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = items.map(item => `
+  const tbody=document.getElementById('adminTbody');
+  if(!items.length){ tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px">No items yet.</td></tr>`; return; }
+  tbody.innerHTML=items.map(item=>`
     <tr>
       <td><span class="badge badge-${item.status}">${item.status}</span></td>
       <td style="font-weight:600">${esc(item.name)}</td>
       <td>${esc(item.category)}</td>
       <td>${formatDate(item.date)}</td>
       <td>${esc(item.location)}</td>
-      <td>${item.contact ? `<a href="mailto:${esc(item.contact)}" style="color:var(--accent);text-decoration:none">${esc(item.contact)}</a>` : '<span style="color:var(--muted)">—</span>'}</td>
+      <td>${item.contact?`<a href="mailto:${esc(item.contact)}" style="color:var(--accent);text-decoration:none">${esc(item.contact)}</a>`:'<span style="color:var(--muted)">—</span>'}</td>
       <td>
         <select class="status-select" onchange="changeStatus('${item.id}',this.value)">
           <option value="lost" ${item.status==='lost'?'selected':''}>🔴 Lost</option>
@@ -1258,38 +883,32 @@ function renderAdmin() {
   `).join('');
 }
 
-function changeStatus(id, status) {
-  const item = items.find(i=>i.id===id);
-  if(item) { item.status = status; save(); renderAdmin(); updateStats(); showToast(`Status updated to ${status}`, 'info'); }
+function changeStatus(id,status) {
+  const item=items.find(i=>i.id===id);
+  if(item){ item.status=status; save(); renderAdmin(); updateStats(); showToast(`Status updated to ${status}`,'info'); }
 }
-
 function deleteItem(id) {
   if(!confirm('Delete this item?')) return;
-  items = items.filter(i=>i.id!==id);
-  save(); renderAdmin(); updateStats(); renderBrowse(); showToast('Item deleted.', 'error');
+  items=items.filter(i=>i.id!==id);
+  save(); renderAdmin(); updateStats(); renderBrowse(); showToast('Item deleted.','error');
 }
-
 function clearAll() {
   if(!confirm('Delete ALL items? This cannot be undone.')) return;
-  items = []; save(); renderAdmin(); updateStats(); renderBrowse(); showToast('All data cleared.', 'error');
+  items=[]; save(); renderAdmin(); updateStats(); renderBrowse(); showToast('All data cleared.','error');
 }
 
 // ── HERO SEARCH ────────────────────────────────────────────────────────────
-function heroSearchGo(val, go) {
-  if(go) {
-    document.getElementById('browseSearch').value = val;
-    showPage('browse');
-  }
+function heroSearchGo(val,go) {
+  if(go){ document.getElementById('browseSearch').value=val; showPage('browse'); }
 }
 
 // ── TOAST ──────────────────────────────────────────────────────────────────
 let toastTimer;
-function showToast(msg, type='success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
+function showToast(msg,type='success') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className=`toast ${type} show`;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 // ── HELPERS ────────────────────────────────────────────────────────────────
@@ -1301,17 +920,9 @@ function formatDate(d) {
   try { return new Date(d+'T12:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'}); } catch(e) { return d; }
 }
 function categoryEmoji(cat) {
-  const map = {Electronics:'📱',Clothing:'👕',Accessories:'👜',Documents:'📄',Keys:'🔑',Jewelry:'💍',Books:'📚',Other:'📦'};
-  return map[cat] || '📦';
+  const map={Electronics:'📱',Clothing:'👕',Accessories:'👜',Documents:'📄',Keys:'🔑',Jewelry:'💍',Books:'📚',Other:'📦'};
+  return map[cat]||'📦';
 }
-
-// ── SET DEFAULT DATE ───────────────────────────────────────────────────────
-document.getElementById('f-date').valueAsDate = new Date();
-
-// ── INIT ───────────────────────────────────────────────────────────────────
-load();
-updateStats();
-renderBrowse();
 </script>
 </body>
 </html>
