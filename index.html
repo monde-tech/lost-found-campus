@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Campus Lost & Found | GROUP 4</title>
+<title>Campus Lost & Found</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -67,6 +67,7 @@
   .form-tab-btn.active.lost-tab{background:var(--lost-bg);color:var(--lost);border:1px solid var(--lost);}
   .form-tab-btn.active.found-tab{background:var(--found-bg);color:var(--found);border:1px solid var(--found);}
   .form-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px;max-width:640px;margin:0 auto;box-shadow:var(--shadow);}
+  .form-section-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   .form-group{margin-bottom:20px;}
   .form-group label{display:block;font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
@@ -236,6 +237,32 @@
   </div>
 
   <div class="form-card">
+
+    <!-- REPORTER INFO SECTION -->
+    <div class="form-section-label">👤 Reporter Information</div>
+
+    <div class="form-row">
+      <div class="form-group" id="fg-fullname">
+        <label>Full Name *</label>
+        <input type="text" id="f-fullname" placeholder="e.g. Juan dela Cruz">
+        <div class="form-error">Full name is required.</div>
+      </div>
+      <div class="form-group" id="fg-email">
+        <label>Email Address *</label>
+        <input type="email" id="f-email" placeholder="e.g. juan@university.edu">
+        <div class="form-error">A valid email address is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group" id="fg-address">
+      <label>Address *</label>
+      <input type="text" id="f-address" placeholder="e.g. Dorm 3, Room 204, University Avenue">
+      <div class="form-error">Address is required.</div>
+    </div>
+
+    <!-- ITEM INFO SECTION -->
+    <div class="form-section-label" style="margin-top:8px;">📦 Item Details</div>
+
     <div class="form-row">
       <div class="form-group" id="fg-name">
         <label>Item Name *</label>
@@ -279,8 +306,8 @@
     </div>
 
     <div class="form-group">
-      <label>Contact (Optional)</label>
-      <input type="text" id="f-contact" placeholder="Email or phone number">
+      <label>Other Contact (Optional)</label>
+      <input type="text" id="f-contact" placeholder="Phone number or alternate contact">
     </div>
 
     <div class="form-group">
@@ -365,10 +392,13 @@ function openModal(id){
   imgEl.innerHTML=item.photo?`<img src="${item.photo}" alt="${esc(item.name)}">`:`<span>${categoryEmoji(item.category)}</span>`;
   document.getElementById('modalTitle').innerHTML=`${esc(item.name)} <span class="badge badge-${item.status}" style="font-size:13px;vertical-align:middle">${item.status}</span>`;
   document.getElementById('modalMeta').innerHTML=`
+    <div class="modal-detail"><span class="dl">Reporter</span><span class="dv">👤 ${esc(item.fullname||'—')}</span></div>
+    <div class="modal-detail"><span class="dl">Email</span><span class="dv">✉️ ${esc(item.email||'—')}</span></div>
+    <div class="modal-detail"><span class="dl">Address</span><span class="dv">🏠 ${esc(item.address||'—')}</span></div>
     <div class="modal-detail"><span class="dl">Category</span><span class="dv">📁 ${esc(item.category)}</span></div>
     <div class="modal-detail"><span class="dl">Location</span><span class="dv">📍 ${esc(item.location)}</span></div>
     <div class="modal-detail"><span class="dl">Date</span><span class="dv">📅 ${formatDate(item.date)}</span></div>
-    ${item.contact?`<div class="modal-detail"><span class="dl">Contact</span><span class="dv">📞 ${esc(item.contact)}</span></div>`:''}
+    ${item.contact?`<div class="modal-detail"><span class="dl">Other Contact</span><span class="dv">📞 ${esc(item.contact)}</span></div>`:''}
   `;
   document.getElementById('modalDesc').textContent=item.description;
   const btn=document.getElementById('modalContactBtn');
@@ -381,10 +411,11 @@ function openModal(id){
   }
   btn.onclick=()=>{
     if(item.status==='claimed')return;
-    if(item.contact){
-      if(!confirm(`Contact this person?\n\n${item.contact}`))return;
-      if(item.contact.includes('@'))window.location.href=`mailto:${item.contact}`;
-      else window.location.href=`tel:${item.contact}`;
+    const contactInfo=item.email||item.contact;
+    if(contactInfo){
+      if(!confirm(`Contact this person?\n\n${contactInfo}`))return;
+      if(item.email)window.location.href=`mailto:${item.email}`;
+      else if(item.contact&&!item.contact.includes('@'))window.location.href=`tel:${item.contact}`;
     } else {
       if(!confirm('Mark this item as claimed?'))return;
     }
@@ -446,14 +477,22 @@ function previewPhoto(input){
   }
 }
 
-function validateField(id,groupId){
+function isValidEmail(email){
+  return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+function validateField(id,groupId,customCheck){
   const val=document.getElementById(id).value.trim();
-  document.getElementById(groupId).classList.toggle('has-error',!val);
-  return!!val;
+  const valid=customCheck?customCheck(val):!!val;
+  document.getElementById(groupId).classList.toggle('has-error',!valid);
+  return valid;
 }
 
 function submitReport(){
   const ok=[
+    validateField('f-fullname','fg-fullname'),
+    validateField('f-email','fg-email',isValidEmail),
+    validateField('f-address','fg-address'),
     validateField('f-name','fg-name'),
     validateField('f-category','fg-category'),
     validateField('f-date','fg-date'),
@@ -467,6 +506,9 @@ function submitReport(){
   items.unshift({
     id:Date.now().toString(),
     status:activeFormTab,
+    fullname:document.getElementById('f-fullname').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    address:document.getElementById('f-address').value.trim(),
     name:document.getElementById('f-name').value.trim(),
     category:document.getElementById('f-category').value,
     date:document.getElementById('f-date').value,
@@ -482,7 +524,7 @@ function submitReport(){
 }
 
 function resetForm(){
-  ['f-name','f-category','f-date','f-location','f-desc','f-contact'].forEach(id=>{
+  ['f-fullname','f-email','f-address','f-name','f-category','f-date','f-location','f-desc','f-contact'].forEach(id=>{
     const el=document.getElementById(id);
     el.value='';
     const fg=el.closest('.form-group');
@@ -522,7 +564,7 @@ function renderBrowse(){
   const filtered=items.filter(item=>{
     const matchStatus=activeFilter==='all'||item.status===activeFilter;
     const matchCat=activeCat==='all'||item.category===activeCat;
-    const matchQ=!query||item.name.toLowerCase().includes(query)||item.description.toLowerCase().includes(query)||item.location.toLowerCase().includes(query)||item.category.toLowerCase().includes(query);
+    const matchQ=!query||item.name.toLowerCase().includes(query)||item.description.toLowerCase().includes(query)||item.location.toLowerCase().includes(query)||item.category.toLowerCase().includes(query)||(item.fullname&&item.fullname.toLowerCase().includes(query));
     return matchStatus&&matchCat&&matchQ;
   });
   const grid=document.getElementById('browseGrid');
@@ -544,6 +586,7 @@ function renderBrowse(){
           <span>📍 ${esc(item.location)}</span>
           <span>📅 ${formatDate(item.date)}</span>
         </div>
+        ${item.fullname?`<div style="font-size:12px;color:var(--muted);margin-top:6px;">👤 ${esc(item.fullname)}</div>`:''}
         <div class="item-desc">${esc(item.description)}</div>
       </div>
     </div>
