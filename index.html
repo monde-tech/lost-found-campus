@@ -4,623 +4,357 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Campus Lost & Found</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <style>
-:root{
-  --bg:#0d0f14;
-  --surface:#161920;
-  --surface2:#1e2229;
-  --border:rgba(255,255,255,0.07);
-  --text:#f0f2f7;
-  --muted:#7a8499;
-  --lost:#ff4d6d;
-  --lost-bg:rgba(255,77,109,0.12);
-  --found:#22c55e;
-  --found-bg:rgba(34,197,94,0.12);
-  --claimed:#3b82f6;
-  --claimed-bg:rgba(59,130,246,0.12);
-  --accent:#f5c518;
-  --accent2:#e879f9;
-  --radius:14px;
-  --shadow:0 8px 32px rgba(0,0,0,0.4);
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(ellipse at 20% 10%, rgba(245,197,24,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(232,121,249,0.05) 0%, transparent 50%);
-  pointer-events:none;
-  z-index:0;
-}
-
-nav{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(13,15,20,0.92);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  padding:0 24px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  height:64px;
-}
-
-.nav-logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.nav-logo .icon{
-  width:36px;
-  height:36px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-}
-
-.nav-logo span{
-  font-family:'Playfair Display',serif;
-  font-weight:700;
-  font-size:18px;
-}
-
-.nav-logo span em{
-  font-style:normal;
-  color:var(--accent);
-}
-
-.nav-tabs{
-  display:flex;
-  gap:4px;
-  background:var(--surface2);
-  border-radius:50px;
-  padding:4px;
-}
-
-.nav-tab{
-  padding:7px 18px;
-  border-radius:50px;
-  border:none;
-  background:transparent;
-  color:var(--muted);
-  cursor:pointer;
-  font-size:14px;
-  font-weight:500;
-}
-
-.nav-tab.active{
-  background:linear-gradient(135deg,var(--accent),#f0a500);
-  color:#000;
-  font-weight:700;
-}
-
-.hamburger{
-  display:none;
-  flex-direction:column;
-  gap:5px;
-  cursor:pointer;
-  background:none;
-  border:none;
-}
-
-.hamburger span{
-  width:22px;
-  height:2px;
-  background:white;
-}
-
-.mobile-menu{
-  display:none;
-  position:fixed;
-  top:64px;
-  left:0;
-  right:0;
-  background:var(--surface);
-  padding:16px;
-  flex-direction:column;
-  gap:8px;
-  z-index:99;
-}
-
-.mobile-menu.open{
-  display:flex;
-}
-
-.page{
-  display:none;
-  padding:32px 24px;
-  max-width:1100px;
-  margin:auto;
-}
-
-.page.active{
-  display:block;
-}
-
-.hero{
-  text-align:center;
-  padding:60px 0 40px;
-}
-
-.hero h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.2rem,5vw,3.8rem);
-  font-weight:900;
-  line-height:1.1;
-  margin-bottom:16px;
-}
-
-.hero h1 .gd{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.hero p{
-  color:var(--muted);
-  max-width:520px;
-  margin:0 auto 40px;
-  line-height:1.7;
-}
-
-.hero-stats{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  flex-wrap:wrap;
-  margin-bottom:48px;
-}
-
-.stat-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:20px 28px;
-  min-width:130px;
-  text-align:center;
-}
-
-.stat-card .num{
-  font-size:2rem;
-  font-weight:900;
-}
-
-.s-lost .num{ color:var(--lost); }
-.s-found .num{ color:var(--found); }
-.s-claimed .num{ color:var(--claimed); }
-
-.search-bar-wrap{
-  display:flex;
-  gap:10px;
-  max-width:560px;
-  margin:0 auto 48px;
-}
-
-.search-bar-wrap input{
-  flex:1;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:50px;
-  padding:14px 22px;
-  color:white;
-}
-
-.section-title{
-  font-family:'Playfair Display',serif;
-  font-size:1.6rem;
-  text-align:center;
-  margin-bottom:24px;
-}
-
-.flow-steps{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.flow-step{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:16px 20px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.step-num{
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),#f0a500);
-  color:black;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-}
-
-.quick-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-  max-width:560px;
-  margin:auto;
-}
-
-.action-card{
-  border:none;
-  border-radius:var(--radius);
-  padding:28px 24px;
-  cursor:pointer;
-  text-align:left;
-  color:white;
-}
-
-.lost-card{
-  background:linear-gradient(135deg,rgba(255,77,109,0.2),rgba(255,77,109,0.06));
-}
-
-.found-card{
-  background:linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.06));
-}
-
-.form-tabs{
-  display:flex;
-  background:var(--surface2);
-  border-radius:12px;
-  padding:4px;
-  max-width:400px;
-  margin:0 auto 32px;
-}
-
-.form-tab-btn{
-  flex:1;
-  padding:11px;
-  border:none;
-  background:transparent;
-  color:var(--muted);
-  border-radius:9px;
-  cursor:pointer;
-}
-
-.form-tab-btn.active{
-  font-weight:700;
-}
-
-.lost-tab.active{
-  background:var(--lost-bg);
-  color:var(--lost);
-}
-
-.found-tab.active{
-  background:var(--found-bg);
-  color:var(--found);
-}
-
-.form-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:32px;
-  max-width:640px;
-  margin:auto;
-}
-
-.form-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-
-.form-group{
-  margin-bottom:20px;
-}
-
-.form-group label{
-  display:block;
-  margin-bottom:8px;
-  font-size:13px;
-  color:var(--muted);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-  width:100%;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:12px 16px;
-  color:white;
-}
-
-.form-group textarea{
-  resize:vertical;
-  min-height:100px;
-}
-
-.photo-drop{
-  border:2px dashed var(--border);
-  border-radius:12px;
-  padding:32px;
-  text-align:center;
-  cursor:pointer;
-}
-
-.photo-drop input{
-  display:none;
-}
-
-.photo-preview{
-  width:100%;
-  max-height:200px;
-  object-fit:cover;
-  border-radius:10px;
-  margin-top:12px;
-  display:none;
-}
-
-.btn-primary{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--accent),#f0a500);
-  font-weight:700;
-  cursor:pointer;
-}
-
-.browse-controls{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:24px;
-}
-
-.browse-search{
-  flex:1;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:50px;
-  padding:11px 20px;
-  color:white;
-}
-
-.filter-chips{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-.chip{
-  padding:7px 14px;
-  border-radius:50px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--muted);
-  cursor:pointer;
-}
-
-.chip.active{
-  background:var(--accent);
-  color:black;
-  border-color:var(--accent);
-}
-
-.items-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:16px;
-}
-
-.item-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  overflow:hidden;
-  cursor:pointer;
-}
-
-.item-img{
-  width:100%;
-  height:160px;
-  background:var(--surface2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:3rem;
-}
-
-.item-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.item-body{
-  padding:16px;
-}
-
-.item-header{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  margin-bottom:8px;
-}
-
-.badge{
-  padding:3px 10px;
-  border-radius:50px;
-  font-size:11px;
-  font-weight:700;
-  text-transform:uppercase;
-}
-
-.badge-lost{
-  background:var(--lost-bg);
-  color:var(--lost);
-}
-
-.badge-found{
-  background:var(--found-bg);
-  color:var(--found);
-}
-
-.badge-claimed{
-  background:var(--claimed-bg);
-  color:var(--claimed);
-}
-
-.empty-state{
-  text-align:center;
-  padding:80px 20px;
-  color:var(--muted);
-}
-
-.modal-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.75);
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:200;
-}
-
-.modal-overlay.open{
-  display:flex;
-}
-
-.modal{
-  background:var(--surface);
-  border-radius:20px;
-  max-width:520px;
-  width:100%;
-  overflow:hidden;
-}
-
-.modal-img{
-  width:100%;
-  height:220px;
-  background:var(--surface2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:5rem;
-}
-
-.modal-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.modal-body{
-  padding:28px;
-}
-
-.modal-title{
-  font-size:1.5rem;
-  margin-bottom:16px;
-}
-
-.modal-detail{
-  margin-bottom:10px;
-}
-
-.modal-desc{
-  background:var(--surface2);
-  padding:14px;
-  border-radius:10px;
-  margin:16px 0;
-}
-
-.modal-actions{
-  display:flex;
-  gap:10px;
-}
-
-.btn-contact,
-.btn-close-modal{
-  flex:1;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-.btn-contact{
-  background:linear-gradient(135deg,var(--accent),#f0a500);
-}
-
-.btn-close-modal{
-  background:var(--surface2);
-  color:white;
-}
-
-.toast{
-  position:fixed;
-  bottom:24px;
-  left:50%;
-  transform:translateX(-50%) translateY(100px);
-  background:var(--surface);
-  padding:12px 24px;
-  border-radius:50px;
-  transition:0.3s;
-}
-
-.toast.show{
-  transform:translateX(-50%) translateY(0);
-}
-
-@media(max-width:768px){
-  .nav-tabs{
-    display:none;
+  :root {
+    --bg: #0d0f14;
+    --surface: #161920;
+    --surface2: #1e2229;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0f2f7;
+    --muted: #7a8499;
+    --lost: #ff4d6d;
+    --lost-bg: rgba(255,77,109,0.12);
+    --found: #22c55e;
+    --found-bg: rgba(34,197,94,0.12);
+    --claimed: #3b82f6;
+    --claimed-bg: rgba(59,130,246,0.12);
+    --accent: #f5c518;
+    --accent2: #e879f9;
+    --radius: 14px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
   }
 
-  .hamburger{
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background: radial-gradient(ellipse at 20% 10%, rgba(245,197,24,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(232,121,249,0.05) 0%, transparent 50%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  nav {
+    position:sticky;
+    top:0;
+    z-index:100;
+    background: rgba(13,15,20,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
     display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:64px;
   }
 
-  .form-row{
-    grid-template-columns:1fr;
+  .nav-logo { display:flex; align-items:center; gap:10px; }
+  .nav-logo .icon {
+    width:36px; height:36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px;
+  }
+  .nav-logo span { font-family:'Playfair Display',serif; font-weight:700; font-size:18px; letter-spacing:-0.3px; }
+  .nav-logo span em { font-style:normal; color:var(--accent); }
+
+  .nav-tabs { display:flex; gap:4px; background:var(--surface2); border-radius:50px; padding:4px; }
+  .nav-tab {
+    padding:7px 18px; border-radius:50px; border:none;
+    background:transparent; color:var(--muted);
+    font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
+    cursor:pointer; transition:all .2s; white-space:nowrap;
+  }
+  .nav-tab.active { background:linear-gradient(135deg,var(--accent),#f0a500); color:#0d0f14; font-weight:600; }
+
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+  .hamburger span { display:block; width:22px; height:2px; background:var(--text); border-radius:2px; transition:.3s; }
+
+  .mobile-menu {
+    display:none; position:fixed; top:64px; left:0; right:0;
+    background:var(--surface); border-bottom:1px solid var(--border);
+    z-index:99; padding:16px; flex-direction:column; gap:8px;
+  }
+  .mobile-menu.open { display:flex; }
+  .mobile-menu .nav-tab { width:100%; text-align:center; border-radius:10px; }
+
+  .page { display:none; padding:32px 24px; max-width:1100px; margin:0 auto; position:relative; z-index:1; }
+  .page.active { display:block; }
+
+  .hero { text-align:center; padding:60px 0 40px; }
+  .hero h1 {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2.2rem,5vw,3.8rem);
+    font-weight:900; line-height:1.1;
+    margin-bottom:16px; letter-spacing:-1px;
+  }
+  .hero h1 .gd {
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .hero p { color:var(--muted); font-size:17px; max-width:520px; margin:0 auto 40px; line-height:1.7; }
+
+  .hero-stats { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:48px; }
+  .stat-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:20px 28px; min-width:130px;
+    text-align:center; transition:transform .2s;
+  }
+  .stat-card:hover { transform:translateY(-3px); }
+  .stat-card .num { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; line-height:1; margin-bottom:4px; }
+  .stat-card .lbl { font-size:12px; color:var(--muted); font-weight:500; text-transform:uppercase; letter-spacing:1px; }
+  .stat-card.s-total .num { color:var(--text); }
+  .stat-card.s-lost .num { color:var(--lost); }
+  .stat-card.s-found .num { color:var(--found); }
+  .stat-card.s-claimed .num { color:var(--claimed); }
+
+  .search-bar-wrap { display:flex; gap:10px; max-width:560px; margin:0 auto 48px; }
+  .search-bar-wrap input {
+    flex:1; background:var(--surface); border:1px solid var(--border);
+    border-radius:50px; padding:14px 22px; color:var(--text);
+    font-size:15px; font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s;
+  }
+  .search-bar-wrap input:focus { border-color:var(--accent); }
+  .search-bar-wrap input::placeholder { color:var(--muted); }
+
+  .how-section { margin-bottom:48px; }
+  .section-title { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; margin-bottom:24px; text-align:center; }
+  .flow-steps { display:flex; gap:0; flex-wrap:wrap; justify-content:center; align-items:center; }
+  .flow-step {
+    display:flex; align-items:center; gap:12px;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:16px 20px; min-width:130px;
+  }
+  .flow-step .step-num {
+    width:34px; height:34px; border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),#f0a500);
+    color:#0d0f14; font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .flow-step .step-txt { font-size:13px; font-weight:500; }
+  .flow-arrow { font-size:20px; color:var(--muted); padding:0 8px; }
+
+  .quick-actions { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:560px; margin:0 auto; }
+  .action-card {
+    border-radius:var(--radius); padding:28px 24px; cursor:pointer;
+    transition:transform .2s, box-shadow .2s; border:none; text-align:left;
+    font-family:'DM Sans',sans-serif; position:relative; overflow:hidden;
+  }
+  .action-card:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,0.4); }
+  .action-card.lost-card { background:linear-gradient(135deg,rgba(255,77,109,0.2),rgba(255,77,109,0.06)); border:1px solid rgba(255,77,109,0.3); }
+  .action-card.found-card { background:linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.06)); border:1px solid rgba(34,197,94,0.3); }
+  .action-card .ac-icon { font-size:2rem; margin-bottom:12px; display:block; }
+  .action-card .ac-title { font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; }
+  .action-card .ac-desc { font-size:13px; color:var(--muted); line-height:1.5; }
+
+  .form-tabs {
+    display:flex; gap:0; background:var(--surface2); border-radius:12px;
+    padding:4px; max-width:400px; margin:0 auto 32px;
+  }
+  .form-tab-btn {
+    flex:1; padding:11px; border-radius:9px; border:none; background:transparent;
+    color:var(--muted); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; transition:.2s; display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .form-tab-btn.active.lost-tab { background:var(--lost-bg); color:var(--lost); border:1px solid var(--lost); }
+  .form-tab-btn.active.found-tab { background:var(--found-bg); color:var(--found); border:1px solid var(--found); }
+
+  .form-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:18px; padding:32px; max-width:640px; margin:0 auto; box-shadow:var(--shadow);
   }
 
-  .quick-actions{
-    grid-template-columns:1fr;
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group { margin-bottom:20px; }
+  .form-group label {
+    display:block; font-size:13px; font-weight:600; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px;
   }
-}
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width:100%; background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:12px 16px; color:var(--text);
+    font-size:15px; font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s;
+    -webkit-appearance:none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color:var(--accent); }
+  .form-group textarea { resize:vertical; min-height:100px; }
+  .form-group select option { background:var(--surface2); }
+
+  .form-error { font-size:12px; color:var(--lost); margin-top:5px; display:none; }
+  .form-group.has-error input,
+  .form-group.has-error select,
+  .form-group.has-error textarea { border-color:var(--lost); }
+  .form-group.has-error .form-error { display:block; }
+
+  .photo-drop {
+    border:2px dashed var(--border); border-radius:12px; padding:32px;
+    text-align:center; cursor:pointer; transition:.2s;
+  }
+  .photo-drop:hover { border-color:var(--accent); background:rgba(245,197,24,0.03); }
+  .photo-drop .drop-icon { font-size:2rem; margin-bottom:8px; }
+  .photo-drop p { font-size:13px; color:var(--muted); }
+  .photo-drop input { display:none; }
+  .photo-preview { width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-top:12px; display:none; }
+
+  .btn-primary {
+    width:100%; padding:14px; border-radius:12px; border:none;
+    background:linear-gradient(135deg,var(--accent),#f0a500);
+    color:#0d0f14; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:700;
+    cursor:pointer; transition:transform .15s, box-shadow .15s; letter-spacing:.3px;
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,197,24,0.3); }
+  .btn-primary:active { transform:none; }
+
+  .browse-controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:24px; }
+  .browse-search {
+    flex:1; min-width:200px; background:var(--surface); border:1px solid var(--border);
+    border-radius:50px; padding:11px 20px; color:var(--text); font-size:14px;
+    font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s;
+  }
+  .browse-search:focus { border-color:var(--accent); }
+  .browse-search::placeholder { color:var(--muted); }
+
+  .filter-chips { display:flex; gap:8px; flex-wrap:wrap; }
+  .chip {
+    padding:7px 14px; border-radius:50px; border:1px solid var(--border);
+    background:var(--surface); color:var(--muted); font-size:13px; font-weight:500;
+    cursor:pointer; transition:.2s; white-space:nowrap;
+  }
+  .chip:hover { border-color:var(--accent); color:var(--accent); }
+  .chip.active { background:var(--accent); color:#0d0f14; border-color:var(--accent); font-weight:600; }
+  .chip.lost-chip.active { background:var(--lost); border-color:var(--lost); color:#fff; }
+  .chip.found-chip.active { background:var(--found); border-color:var(--found); color:#fff; }
+  .chip.claimed-chip.active { background:var(--claimed); border-color:var(--claimed); color:#fff; }
+
+  .items-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+  .item-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); overflow:hidden; cursor:pointer;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .item-card:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
+  .item-img {
+    width:100%; height:160px; object-fit:cover; background:var(--surface2);
+    display:flex; align-items:center; justify-content:center; font-size:3rem;
+  }
+  .item-img img { width:100%; height:100%; object-fit:cover; }
+  .item-body { padding:16px; }
+  .item-header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
+  .item-name { font-weight:700; font-size:15px; line-height:1.3; }
+  .badge {
+    padding:3px 10px; border-radius:50px; font-size:11px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.7px; white-space:nowrap; flex-shrink:0;
+  }
+  .badge-lost { background:var(--lost-bg); color:var(--lost); border:1px solid var(--lost); }
+  .badge-found { background:var(--found-bg); color:var(--found); border:1px solid var(--found); }
+  .badge-claimed { background:var(--claimed-bg); color:var(--claimed); border:1px solid var(--claimed); }
+  .item-meta { font-size:12px; color:var(--muted); display:flex; gap:12px; flex-wrap:wrap; }
+  .item-desc { font-size:13px; color:var(--muted); margin-top:8px; line-height:1.5; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+
+  .empty-state { text-align:center; padding:80px 20px; color:var(--muted); }
+  .empty-state .ei { font-size:3rem; margin-bottom:16px; }
+  .empty-state p { font-size:15px; }
+
+  .modal-overlay {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(8px);
+    z-index:200;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+    max-width:520px;
+    width:100%;
+    max-height:90vh;
+    overflow-y:auto;
+    box-shadow:0 24px 80px rgba(0,0,0,0.6);
+    animation:modalIn .25s ease;
+    position:relative;
+  }
+  @keyframes modalIn { from { transform:scale(.95) translateY(20px); opacity:0; } to { transform:none; opacity:1; } }
+  .modal-img {
+    width:100%; height:220px; object-fit:cover;
+    border-radius:18px 18px 0 0; background:var(--surface2);
+    display:flex; align-items:center; justify-content:center; font-size:5rem;
+    overflow:hidden;
+  }
+  .modal-img img { width:100%; height:100%; object-fit:cover; border-radius:18px 18px 0 0; }
+  .modal-body { padding:28px; }
+  .modal-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; margin-bottom:16px; line-height:1.2; }
+  .modal-detail { display:flex; gap:8px; margin-bottom:10px; font-size:14px; }
+  .modal-detail .dl { color:var(--muted); font-weight:500; min-width:90px; }
+  .modal-detail .dv { color:var(--text); }
+  .modal-desc { background:var(--surface2); border-radius:10px; padding:14px; margin:16px 0; font-size:14px; line-height:1.7; color:var(--muted); }
+  .modal-actions { display:flex; gap:10px; margin-top:20px; }
+  .btn-contact {
+    flex:1; padding:12px; border-radius:10px; border:none;
+    background:linear-gradient(135deg,var(--accent),#f0a500);
+    color:#0d0f14; font-family:'DM Sans',sans-serif;
+    font-weight:700; font-size:14px; cursor:pointer; transition:.2s;
+  }
+  .btn-contact:hover { transform:translateY(-2px); }
+  .btn-contact:disabled { opacity:0.7; cursor:not-allowed; transform:none; }
+  .btn-close-modal {
+    padding:12px 20px; border-radius:10px; border:1px solid var(--border);
+    background:var(--surface2); color:var(--text); font-family:'DM Sans',sans-serif;
+    font-weight:600; font-size:14px; cursor:pointer; transition:.2s;
+  }
+  .btn-close-modal:hover { border-color:var(--muted); background:var(--surface); }
+
+  .toast {
+    position:fixed; bottom:24px; left:50%;
+    transform:translateX(-50%) translateY(100px);
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:50px; padding:12px 24px; font-size:14px; font-weight:500;
+    z-index:300; box-shadow:var(--shadow);
+    transition:transform .3s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap;
+  }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+  .toast.success { border-color:var(--found); color:var(--found); }
+  .toast.error { border-color:var(--lost); color:var(--lost); }
+  .toast.info { border-color:var(--claimed); color:var(--claimed); }
+
+  @media (max-width:768px) {
+    .nav-tabs { display:none; }
+    .hamburger { display:flex; }
+    .form-row { grid-template-columns:1fr; }
+    .quick-actions { grid-template-columns:1fr 1fr; }
+    .flow-arrow { display:none; }
+    .flow-steps { gap:8px; }
+    .flow-step { min-width:0; }
+    .page { padding:20px 16px; }
+    .form-card { padding:20px; }
+  }
+  @media (max-width:480px) {
+    .quick-actions { grid-template-columns:1fr; }
+    .hero { padding:40px 0 24px; }
+  }
 </style>
 </head>
-
 <body>
 
 <nav>
@@ -628,101 +362,91 @@ nav{
     <div class="icon">🎓</div>
     <span>Campus <em>Lost & Found</em></span>
   </div>
-
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
     <button class="nav-tab" onclick="showPage('report')">📋 Report</button>
     <button class="nav-tab" onclick="showPage('browse')">🔍 Browse</button>
   </div>
-
-  <button class="hamburger" onclick="toggleMobile()">
-    <span></span>
-    <span></span>
-    <span></span>
+  <button class="hamburger" onclick="toggleMobile()" aria-label="Menu">
+    <span></span><span></span><span></span>
   </button>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
   <button class="nav-tab active" onclick="showPage('home');closeMobile()">🏠 Home</button>
-  <button class="nav-tab" onclick="showPage('report');closeMobile()">📋 Report</button>
-  <button class="nav-tab" onclick="showPage('browse');closeMobile()">🔍 Browse</button>
+  <button class="nav-tab" onclick="showPage('report');closeMobile()">📋 Report Item</button>
+  <button class="nav-tab" onclick="showPage('browse');closeMobile()">🔍 Browse Items</button>
 </div>
 
 <!-- HOME -->
 <div class="page active" id="page-home">
-
   <div class="hero">
     <h1>Campus<br><span class="gd">Lost & Found</span></h1>
-
-    <p>
-      A clean, fast portal to report lost items and reunite found ones with their owners.
-    </p>
-
+    <p>A clean, fast portal to report lost items and reunite found ones with their owners — built for students, on any device.</p>
     <div class="search-bar-wrap">
-      <input type="text" id="heroSearch"
-      placeholder="Search for a lost item…"
-      onkeydown="if(event.key==='Enter')heroSearchGo(this.value,true)">
+      <input type="text" id="heroSearch" placeholder="Search for a lost item…" oninput="heroSearchGo(this.value)" onkeydown="if(event.key==='Enter')heroSearchGo(this.value,true)">
     </div>
-
     <div class="hero-stats">
-      <div class="stat-card">
-        <div class="num" id="statTotal">0</div>
-        <div>Total</div>
-      </div>
-
-      <div class="stat-card s-lost">
-        <div class="num" id="statLost">0</div>
-        <div>Lost</div>
-      </div>
-
-      <div class="stat-card s-found">
-        <div class="num" id="statFound">0</div>
-        <div>Found</div>
-      </div>
-
-      <div class="stat-card s-claimed">
-        <div class="num" id="statClaimed">0</div>
-        <div>Claimed</div>
-      </div>
+      <div class="stat-card s-total"><div class="num" id="statTotal">0</div><div class="lbl">Total Items</div></div>
+      <div class="stat-card s-lost"><div class="num" id="statLost">0</div><div class="lbl">Lost</div></div>
+      <div class="stat-card s-found"><div class="num" id="statFound">0</div><div class="lbl">Found</div></div>
+      <div class="stat-card s-claimed"><div class="num" id="statClaimed">0</div><div class="lbl">Claimed</div></div>
     </div>
   </div>
 
+  <div class="how-section">
+    <div class="section-title">How It Works</div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="step-num">1</div><div class="step-txt">Report your item</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="step-num">2</div><div class="step-txt">Browse all items</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="step-num">3</div><div class="step-txt">Match & Contact</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="step-num">4</div><div class="step-txt">Mark as Claimed ✓</div></div>
+    </div>
+  </div>
+
+  <div style="max-width:560px;margin:0 auto;">
+    <div class="section-title">What do you need?</div>
+    <div class="quick-actions">
+      <button class="action-card lost-card" onclick="showPage('report');setFormTab('lost')">
+        <span class="ac-icon">😟</span>
+        <div class="ac-title">I Lost Something</div>
+        <div class="ac-desc">File a report for your missing item in under 2 minutes.</div>
+      </button>
+      <button class="action-card found-card" onclick="showPage('report');setFormTab('found')">
+        <span class="ac-icon">🙌</span>
+        <div class="ac-title">I Found Something</div>
+        <div class="ac-desc">Log a found item so the owner can claim it.</div>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- REPORT -->
 <div class="page" id="page-report">
-
   <div style="text-align:center;margin-bottom:32px;">
-    <h2 style="font-size:2rem;">Report an Item</h2>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:8px;">Report an Item</h2>
+    <p style="color:var(--muted);font-size:15px;">Fill in the details below — it takes less than 2 minutes.</p>
   </div>
 
   <div class="form-tabs">
-    <button class="form-tab-btn lost-tab active"
-      id="tabLost"
-      onclick="setFormTab('lost')">
-      🔴 Lost
-    </button>
-
-    <button class="form-tab-btn found-tab"
-      id="tabFound"
-      onclick="setFormTab('found')">
-      🟢 Found
-    </button>
+    <button class="form-tab-btn active lost-tab" id="tabLost" onclick="setFormTab('lost')">🔴 I Lost Something</button>
+    <button class="form-tab-btn found-tab" id="tabFound" onclick="setFormTab('found')">🟢 I Found Something</button>
   </div>
 
   <div class="form-card">
-
     <div class="form-row">
-
-      <div class="form-group">
-        <label>Item Name</label>
-        <input type="text" id="f-name">
+      <div class="form-group" id="fg-name">
+        <label>Item Name *</label>
+        <input type="text" id="f-name" placeholder="e.g. Black Wallet">
+        <div class="form-error">Item name is required.</div>
       </div>
-
-      <div class="form-group">
-        <label>Category</label>
-
+      <div class="form-group" id="fg-category">
+        <label>Category *</label>
         <select id="f-category">
+          <option value="">Select category…</option>
           <option>Electronics</option>
           <option>Clothing</option>
           <option>Accessories</option>
@@ -732,361 +456,340 @@ nav{
           <option>Books</option>
           <option>Other</option>
         </select>
+        <div class="form-error">Please select a category.</div>
       </div>
-
     </div>
 
     <div class="form-row">
-
-      <div class="form-group">
-        <label>Date</label>
+      <div class="form-group" id="fg-date">
+        <label>Date *</label>
         <input type="date" id="f-date">
+        <div class="form-error">Date is required.</div>
       </div>
-
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" id="f-location">
-      </div>
-
-    </div>
-
-    <div class="form-group">
-      <label>Description</label>
-      <textarea id="f-desc"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Contact</label>
-      <input type="text" id="f-contact">
-    </div>
-
-    <div class="form-group">
-      <label>Photo</label>
-
-      <div class="photo-drop"
-      onclick="document.getElementById('f-photo').click()">
-
-        <div>📷 Upload Photo</div>
-
-        <input type="file"
-        id="f-photo"
-        accept="image/*"
-        onchange="previewPhoto(this)">
-
-        <img id="photoPreview" class="photo-preview">
-
+      <div class="form-group" id="fg-location">
+        <label>Location *</label>
+        <input type="text" id="f-location" placeholder="e.g. Library 2nd Floor">
+        <div class="form-error">Location is required.</div>
       </div>
     </div>
 
-    <button class="btn-primary" onclick="submitReport()">
-      Submit Report
-    </button>
+    <div class="form-group" id="fg-desc">
+      <label>Description *</label>
+      <textarea id="f-desc" placeholder="Describe the item in detail — color, brand, distinguishing marks…"></textarea>
+      <div class="form-error">Description is required.</div>
+    </div>
 
+    <div class="form-group">
+      <label>Contact (Optional)</label>
+      <input type="text" id="f-contact" placeholder="Email or phone number">
+    </div>
+
+    <div class="form-group">
+      <label>Photo (Optional)</label>
+      <div class="photo-drop" onclick="document.getElementById('f-photo').click()">
+        <div class="drop-icon">📷</div>
+        <p>Tap to upload a photo</p>
+        <input type="file" id="f-photo" accept="image/*" onchange="previewPhoto(this)">
+        <img id="photoPreview" class="photo-preview" alt="Preview">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="submitReport()">Submit Report</button>
   </div>
 </div>
 
 <!-- BROWSE -->
 <div class="page" id="page-browse">
-
-  <h2 style="margin-bottom:20px;">Browse Items</h2>
+  <div style="margin-bottom:24px;">
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:8px;">Browse Items</h2>
+    <p style="color:var(--muted);font-size:15px;">Search and filter all reported items.</p>
+  </div>
 
   <div class="browse-controls">
+    <input class="browse-search" type="text" id="browseSearch" placeholder="Search items…" oninput="renderBrowse()">
+    <div class="filter-chips">
+      <div class="chip active" data-filter="all" onclick="setFilter('all',this)">All</div>
+      <div class="chip lost-chip" data-filter="lost" onclick="setFilter('lost',this)">🔴 Lost</div>
+      <div class="chip found-chip" data-filter="found" onclick="setFilter('found',this)">🟢 Found</div>
+      <div class="chip claimed-chip" data-filter="claimed" onclick="setFilter('claimed',this)">🔵 Claimed</div>
+    </div>
+  </div>
 
-    <input class="browse-search"
-    type="text"
-    id="browseSearch"
-    placeholder="Search items..."
-    oninput="renderBrowse()">
-
+  <div class="filter-chips" style="margin-bottom:20px;flex-wrap:wrap;" id="catChips">
+    <div class="chip active" data-cat="all" onclick="setCat('all',this)">All Categories</div>
+    <div class="chip" data-cat="Electronics" onclick="setCat('Electronics',this)">📱 Electronics</div>
+    <div class="chip" data-cat="Clothing" onclick="setCat('Clothing',this)">👕 Clothing</div>
+    <div class="chip" data-cat="Accessories" onclick="setCat('Accessories',this)">👜 Accessories</div>
+    <div class="chip" data-cat="Documents" onclick="setCat('Documents',this)">📄 Documents</div>
+    <div class="chip" data-cat="Keys" onclick="setCat('Keys',this)">🔑 Keys</div>
+    <div class="chip" data-cat="Jewelry" onclick="setCat('Jewelry',this)">💍 Jewelry</div>
+    <div class="chip" data-cat="Books" onclick="setCat('Books',this)">📚 Books</div>
+    <div class="chip" data-cat="Other" onclick="setCat('Other',this)">📦 Other</div>
   </div>
 
   <div class="items-grid" id="browseGrid"></div>
-
 </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
-
   <div class="modal" id="modalBox">
-
     <div class="modal-img" id="modalImg"></div>
-
     <div class="modal-body">
-
       <div class="modal-title" id="modalTitle"></div>
-
       <div id="modalMeta"></div>
-
       <div class="modal-desc" id="modalDesc"></div>
-
       <div class="modal-actions">
-
-        <button class="btn-contact"
-        id="modalContactBtn">
-          Contact
-        </button>
-
-        <button class="btn-close-modal"
-        onclick="closeModal()">
-          Close
-        </button>
-
+        <button class="btn-contact" id="modalContactBtn">📞 Contact / Claim</button>
+        <button class="btn-close-modal" id="modalCloseBtn">✕ Close</button>
       </div>
-
     </div>
-
   </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const STORAGE_KEY='clf_items_v2';
+const STORAGE_KEY = 'clf_items_v2';
+let items = [];
+let activeFilter = 'all';
+let activeCat = 'all';
+let activeFormTab = 'lost';
 
-let items=[];
-let activeFormTab='lost';
-
-function save(){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(items));
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
+function load() {
+  try { items = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { items = []; }
 }
 
-function load(){
-  items=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-}
+function openModal(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
 
-function showPage(p){
+  const overlay = document.getElementById('modalOverlay');
+  const imgEl   = document.getElementById('modalImg');
 
-  document.querySelectorAll('.page')
-  .forEach(el=>el.classList.remove('active'));
+  imgEl.innerHTML = item.photo
+    ? `<img src="${item.photo}" alt="${esc(item.name)}">`
+    : categoryEmoji(item.category);
 
-  document.getElementById('page-'+p)
-  .classList.add('active');
+  document.getElementById('modalTitle').innerHTML =
+    `${esc(item.name)} <span class="badge badge-${item.status}" style="font-size:13px;vertical-align:middle">${item.status}</span>`;
 
-  document.querySelectorAll('.nav-tab')
-  .forEach(el=>el.classList.remove('active'));
+  document.getElementById('modalMeta').innerHTML = `
+    <div class="modal-detail"><span class="dl">Category</span><span class="dv">📁 ${esc(item.category)}</span></div>
+    <div class="modal-detail"><span class="dl">Location</span><span class="dv">📍 ${esc(item.location)}</span></div>
+    <div class="modal-detail"><span class="dl">Date</span><span class="dv">📅 ${formatDate(item.date)}</span></div>
+    ${item.contact ? `<div class="modal-detail"><span class="dl">Contact</span><span class="dv">📞 ${esc(item.contact)}</span></div>` : ''}
+  `;
 
-  const map={
-    home:'🏠',
-    report:'📋',
-    browse:'🔍'
-  };
+  document.getElementById('modalDesc').textContent = item.description;
 
-  document.querySelectorAll('.nav-tab').forEach(el=>{
-    if(el.textContent.includes(map[p])){
-      el.classList.add('active');
-    }
-  });
-
-  if(p==='browse'){
-    renderBrowse();
+  const btn = document.getElementById('modalContactBtn');
+  if (item.status === 'claimed') {
+    btn.textContent = '✅ Already Claimed';
+    btn.disabled = true;
+  } else {
+    btn.disabled = false;
+    btn.textContent = item.status === 'lost' ? '🙌 I Found This Item' : '🎉 Claim This Item';
   }
 
+  btn.onclick = () => {
+    if (item.status === 'claimed') return;
+    if (item.contact) {
+      if (!confirm(`Contact this person?\n\n${item.contact}`)) return;
+      if (item.contact.includes('@')) window.location.href = `mailto:${item.contact}`;
+      else window.location.href = `tel:${item.contact}`;
+    } else {
+      if (!confirm('Mark this item as claimed?')) return;
+    }
+    item.status = 'claimed';
+    save(); renderBrowse(); updateStats();
+    closeModal();
+    showToast('🔵 Item marked as claimed!', 'info');
+  };
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('modalCloseBtn').addEventListener('click', () => closeModal());
+  document.getElementById('modalOverlay').addEventListener('click', (e) => closeModal(e));
+  document.getElementById('modalBox').addEventListener('click', (e) => e.stopPropagation());
+
+  document.getElementById('f-date').valueAsDate = new Date();
+  load();
+  updateStats();
+  renderBrowse();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(el => {
+    const map = {home:'🏠',report:'📋',browse:'🔍'};
+    if(el.textContent.includes(map[p])) el.classList.add('active');
+  });
+  if(p==='browse') renderBrowse();
+  if(p==='home')   updateStats();
   window.scrollTo(0,0);
 }
+function toggleMobile() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobile()  { document.getElementById('mobileMenu').classList.remove('open'); }
 
-function toggleMobile(){
-  document.getElementById('mobileMenu')
-  .classList.toggle('open');
+function setFormTab(t) {
+  activeFormTab = t;
+  document.getElementById('tabLost').classList.toggle('active', t==='lost');
+  document.getElementById('tabFound').classList.toggle('active', t==='found');
 }
 
-function closeMobile(){
-  document.getElementById('mobileMenu')
-  .classList.remove('open');
-}
-
-function setFormTab(t){
-
-  activeFormTab=t;
-
-  document.getElementById('tabLost')
-  .classList.toggle('active',t==='lost');
-
-  document.getElementById('tabFound')
-  .classList.toggle('active',t==='found');
-}
-
-function previewPhoto(input){
-
-  const preview=document.getElementById('photoPreview');
-
-  if(input.files && input.files[0]){
-
-    const reader=new FileReader();
-
-    reader.onload=e=>{
-      preview.src=e.target.result;
-      preview.style.display='block';
-    };
-
+function previewPhoto(input) {
+  const preview = document.getElementById('photoPreview');
+  if(input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => { preview.src = e.target.result; preview.style.display='block'; };
     reader.readAsDataURL(input.files[0]);
   }
 }
 
-function submitReport(){
+function validateField(id, groupId) {
+  const val = document.getElementById(id).value.trim();
+  document.getElementById(groupId).classList.toggle('has-error', !val);
+  return !!val;
+}
 
-  const photoPreview=document.getElementById('photoPreview');
+function submitReport() {
+  const ok = [
+    validateField('f-name','fg-name'),
+    validateField('f-category','fg-category'),
+    validateField('f-date','fg-date'),
+    validateField('f-location','fg-location'),
+    validateField('f-desc','fg-desc')
+  ].every(Boolean);
+
+  if(!ok) { showToast('Please fill in all required fields.','error'); return; }
+
+  let photo = '';
+  const preview = document.getElementById('photoPreview');
+  if(preview.style.display==='block') photo = preview.src;
 
   items.unshift({
-    id:Date.now().toString(),
-    status:activeFormTab,
-    name:document.getElementById('f-name').value,
-    category:document.getElementById('f-category').value,
-    date:document.getElementById('f-date').value,
-    location:document.getElementById('f-location').value,
-    description:document.getElementById('f-desc').value,
-    contact:document.getElementById('f-contact').value,
-    photo:photoPreview.src || ''
+    id: Date.now().toString(),
+    status: activeFormTab,
+    name: document.getElementById('f-name').value.trim(),
+    category: document.getElementById('f-category').value,
+    date: document.getElementById('f-date').value,
+    location: document.getElementById('f-location').value.trim(),
+    description: document.getElementById('f-desc').value.trim(),
+    contact: document.getElementById('f-contact').value.trim(),
+    photo,
+    createdAt: new Date().toISOString()
   });
 
-  save();
+  save(); resetForm(); updateStats();
+  showToast('✅ Report submitted successfully!','success');
+  setTimeout(() => showPage('browse'), 1200);
+}
 
+function resetForm() {
+  ['f-name','f-category','f-date','f-location','f-desc','f-contact'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value='';
+    const fg = el.closest('.form-group');
+    if(fg) fg.classList.remove('has-error');
+  });
+  const preview = document.getElementById('photoPreview');
+  preview.src=''; preview.style.display='none';
+  document.getElementById('f-photo').value='';
+}
+
+function updateStats() {
+  const t=items.length, l=items.filter(i=>i.status==='lost').length,
+        f=items.filter(i=>i.status==='found').length, c=items.filter(i=>i.status==='claimed').length;
+  document.getElementById('statTotal').textContent=t;
+  document.getElementById('statLost').textContent=l;
+  document.getElementById('statFound').textContent=f;
+  document.getElementById('statClaimed').textContent=c;
+}
+
+function setFilter(f,el) {
+  activeFilter=f;
+  document.querySelectorAll('.filter-chips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
   renderBrowse();
-
-  updateStats();
-
-  showToast('Report submitted!');
-
-  showPage('browse');
+}
+function setCat(c,el) {
+  activeCat=c;
+  document.querySelectorAll('#catChips .chip').forEach(ch=>ch.classList.remove('active'));
+  el.classList.add('active');
+  renderBrowse();
 }
 
-function updateStats(){
-
-  document.getElementById('statTotal').textContent=items.length;
-
-  document.getElementById('statLost').textContent=
-    items.filter(i=>i.status==='lost').length;
-
-  document.getElementById('statFound').textContent=
-    items.filter(i=>i.status==='found').length;
-
-  document.getElementById('statClaimed').textContent=
-    items.filter(i=>i.status==='claimed').length;
-}
-
-function renderBrowse(){
-
-  const query=document.getElementById('browseSearch')
-  .value.toLowerCase();
-
-  const filtered=items.filter(item=>
-    item.name.toLowerCase().includes(query)
-  );
-
+function renderBrowse() {
+  const query=(document.getElementById('browseSearch').value||'').toLowerCase();
+  const filtered=items.filter(item=>{
+    const matchStatus=activeFilter==='all'||item.status===activeFilter;
+    const matchCat=activeCat==='all'||item.category===activeCat;
+    const matchQ=!query||item.name.toLowerCase().includes(query)||item.description.toLowerCase().includes(query)||item.location.toLowerCase().includes(query)||item.category.toLowerCase().includes(query);
+    return matchStatus&&matchCat&&matchQ;
+  });
   const grid=document.getElementById('browseGrid');
-
-  if(!filtered.length){
-
-    grid.innerHTML=`
-      <div class="empty-state">
-        No items found.
-      </div>
-    `;
-
+  if(!filtered.length) {
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="ei">🔍</div><p>No items found. Try a different filter.</p></div>`;
     return;
   }
-
   grid.innerHTML=filtered.map(item=>`
-
-    <div class="item-card"
-    onclick="openModal('${item.id}')">
-
-      <div class="item-img">
-        ${item.photo
-          ? `<img src="${item.photo}">`
-          : '📦'}
-      </div>
-
+    <div class="item-card" onclick="openModal('${item.id}')">
+      <div class="item-img">${item.photo?`<img src="${item.photo}" alt="${esc(item.name)}">`:categoryEmoji(item.category)}</div>
       <div class="item-body">
-
         <div class="item-header">
-
-          <div>${item.name}</div>
-
-          <div class="badge badge-${item.status}">
-            ${item.status}
-          </div>
-
+          <div class="item-name">${esc(item.name)}</div>
+          <div class="badge badge-${item.status}">${item.status}</div>
         </div>
-
-        <div>${item.location}</div>
-
+        <div class="item-meta">
+          <span>📁 ${esc(item.category)}</span>
+          <span>📍 ${esc(item.location)}</span>
+          <span>📅 ${formatDate(item.date)}</span>
+        </div>
+        <div class="item-desc">${esc(item.description)}</div>
       </div>
-
     </div>
-
   `).join('');
 }
 
-function openModal(id){
-
-  const item=items.find(i=>i.id===id);
-
-  if(!item) return;
-
-  document.getElementById('modalTitle')
-  .textContent=item.name;
-
-  document.getElementById('modalMeta')
-  .innerHTML=`
-    <div class="modal-detail">📍 ${item.location}</div>
-    <div class="modal-detail">📅 ${item.date}</div>
-  `;
-
-  document.getElementById('modalDesc')
-  .textContent=item.description;
-
-  document.getElementById('modalImg').innerHTML=
-    item.photo
-    ? `<img src="${item.photo}">`
-    : '📦';
-
-  document.getElementById('modalOverlay')
-  .classList.add('open');
+function heroSearchGo(val,go) {
+  if(go){ document.getElementById('browseSearch').value=val; showPage('browse'); }
 }
 
-function closeModal(){
-  document.getElementById('modalOverlay')
-  .classList.remove('open');
-}
-
-function heroSearchGo(val,go){
-
-  if(go){
-
-    document.getElementById('browseSearch').value=val;
-
-    showPage('browse');
-
-    renderBrowse();
-  }
-}
-
-function showToast(msg){
-
+let toastTimer;
+function showToast(msg,type='success') {
   const t=document.getElementById('toast');
-
-  t.textContent=msg;
-
-  t.classList.add('show');
-
-  setTimeout(()=>{
-    t.classList.remove('show');
-  },3000);
+  t.textContent=msg; t.className=`toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-
-  document.getElementById('f-date').valueAsDate=
-    new Date();
-
-  load();
-
-  updateStats();
-
-  renderBrowse();
-});
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(d) {
+  if(!d) return '—';
+  try { return new Date(d+'T12:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'}); } catch(e) { return d; }
+}
+function categoryEmoji(cat) {
+  const map={Electronics:'📱',Clothing:'👕',Accessories:'👜',Documents:'📄',Keys:'🔑',Jewelry:'💍',Books:'📚',Other:'📦'};
+  return map[cat]||'📦';
+}
 </script>
-
 </body>
 </html>
