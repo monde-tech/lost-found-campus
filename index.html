@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="theme-color" content="#0d0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Lost & Found">
+<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Campus Lost & Found</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -12,13 +17,15 @@
     --found:#22c55e;--found-bg:rgba(34,197,94,0.12);--claimed:#3b82f6;--claimed-bg:rgba(59,130,246,0.12);
     --accent:#f5c518;--accent2:#e879f9;--radius:14px;--shadow:0 8px 32px rgba(0,0,0,0.4);
   }
-  *{margin:0;padding:0;box-sizing:border-box;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
   body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 10%,rgba(245,197,24,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(232,121,249,0.05) 0%,transparent 50%);pointer-events:none;z-index:0;}
+
+  /* ── NAV ── */
   nav{position:sticky;top:0;z-index:100;background:rgba(13,15,20,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
-  .nav-logo{display:flex;align-items:center;gap:10px;}
-  .nav-logo .icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-  .nav-logo span{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;letter-spacing:-0.3px;}
+  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .nav-logo .icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .nav-logo span{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;letter-spacing:-0.3px;color:var(--text);}
   .nav-logo span em{font-style:normal;color:var(--accent);}
   .nav-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:50px;padding:4px;}
   .nav-tab{padding:7px 18px;border-radius:50px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap;}
@@ -27,9 +34,26 @@
   .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s;}
   .mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);z-index:99;padding:16px;flex-direction:column;gap:8px;}
   .mobile-menu.open{display:flex;}
-  .mobile-menu .nav-tab{width:100%;text-align:center;border-radius:10px;}
+  .mobile-menu .nav-tab{width:100%;text-align:center;border-radius:10px;padding:12px;}
+
+  /* ── BACK BUTTON ── */
+  .back-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:50px;padding:9px 20px;
+    color:var(--muted);font-family:'DM Sans',sans-serif;
+    font-size:14px;font-weight:600;cursor:pointer;
+    transition:all .2s;margin-bottom:28px;
+    text-decoration:none;
+  }
+  .back-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(245,197,24,0.05);}
+  .back-btn svg{width:16px;height:16px;flex-shrink:0;}
+
+  /* ── PAGES ── */
   .page{display:none;padding:32px 24px;max-width:1100px;margin:0 auto;position:relative;z-index:1;}
   .page.active{display:block;}
+
+  /* ── HOME HERO ── */
   .hero{text-align:center;padding:60px 0 40px;}
   .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:16px;letter-spacing:-1px;}
   .hero h1 .gd{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -39,7 +63,6 @@
   .stat-card:hover{transform:translateY(-3px);}
   .stat-card .num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1;margin-bottom:4px;}
   .stat-card .lbl{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;}
-  .stat-card.s-total .num{color:var(--text);}
   .stat-card.s-lost .num{color:var(--lost);}
   .stat-card.s-found .num{color:var(--found);}
   .stat-card.s-claimed .num{color:var(--claimed);}
@@ -47,6 +70,8 @@
   .search-bar-wrap input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:50px;padding:14px 22px;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
   .search-bar-wrap input:focus{border-color:var(--accent);}
   .search-bar-wrap input::placeholder{color:var(--muted);}
+
+  /* ── HOW IT WORKS ── */
   .how-section{margin-bottom:48px;}
   .section-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:24px;text-align:center;}
   .flow-steps{display:flex;gap:0;flex-wrap:wrap;justify-content:center;align-items:center;}
@@ -62,6 +87,8 @@
   .action-card .ac-icon{font-size:2rem;margin-bottom:12px;display:block;}
   .action-card .ac-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
   .action-card .ac-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+
+  /* ── FORM ── */
   .form-tabs{display:flex;gap:0;background:var(--surface2);border-radius:12px;padding:4px;max-width:400px;margin:0 auto 32px;}
   .form-tab-btn{flex:1;padding:11px;border-radius:9px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px;}
   .form-tab-btn.active.lost-tab{background:var(--lost-bg);color:var(--lost);border:1px solid var(--lost);}
@@ -87,6 +114,8 @@
   .btn-primary{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),#f0a500);color:#0d0f14;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;letter-spacing:.3px;}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,197,24,0.3);}
   .btn-primary:active{transform:none;}
+
+  /* ── BROWSE ── */
   .browse-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:24px;}
   .browse-search{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:50px;padding:11px 20px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
   .browse-search:focus{border-color:var(--accent);}
@@ -101,7 +130,7 @@
   .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
   .item-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;}
   .item-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
-  .item-img{width:100%;height:160px;object-fit:cover;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+  .item-img{width:100%;height:160px;object-fit:cover;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden;}
   .item-img img{width:100%;height:100%;object-fit:cover;}
   .item-body{padding:16px;}
   .item-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
@@ -115,6 +144,8 @@
   .empty-state{text-align:center;padding:80px 20px;color:var(--muted);}
   .empty-state .ei{font-size:3rem;margin-bottom:16px;}
   .empty-state p{font-size:15px;}
+
+  /* ── MODAL ── */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.open{display:flex;}
   .modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.6);animation:modalIn .25s ease;position:relative;}
@@ -132,12 +163,16 @@
   .btn-contact:hover{transform:translateY(-2px);}
   .btn-contact:disabled{opacity:0.7;cursor:not-allowed;transform:none;}
   .btn-close-modal{padding:12px 20px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:.2s;}
-  .btn-close-modal:hover{border-color:var(--muted);background:var(--surface);}
+  .btn-close-modal:hover{border-color:var(--muted);}
+
+  /* ── TOAST ── */
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--border);border-radius:50px;padding:12px 24px;font-size:14px;font-weight:500;z-index:300;box-shadow:var(--shadow);transition:transform .3s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap;}
   .toast.show{transform:translateX(-50%) translateY(0);}
   .toast.success{border-color:var(--found);color:var(--found);}
   .toast.error{border-color:var(--lost);color:var(--lost);}
   .toast.info{border-color:var(--claimed);color:var(--claimed);}
+
+  /* ── RESPONSIVE ── */
   @media(max-width:768px){
     .nav-tabs{display:none;}
     .hamburger{display:flex;}
@@ -145,23 +180,30 @@
     .quick-actions{grid-template-columns:1fr 1fr;}
     .flow-arrow{display:none;}
     .flow-steps{gap:8px;}
-    .flow-step{min-width:0;}
+    .flow-step{min-width:0;flex:1;}
     .page{padding:20px 16px;}
     .form-card{padding:20px;}
+    .stat-card{padding:16px 20px;min-width:100px;}
+    .stat-card .num{font-size:1.6rem;}
   }
   @media(max-width:480px){
     .quick-actions{grid-template-columns:1fr;}
     .hero{padding:40px 0 24px;}
+    .hero-stats{gap:10px;}
+    .stat-card{min-width:80px;padding:14px;}
+    .modal-actions{flex-direction:column;}
+    .btn-close-modal{width:100%;}
+    .back-btn{padding:8px 16px;font-size:13px;}
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">
+  <a href="#" class="nav-logo" onclick="showPage('home');return false;">
     <div class="icon">🎓</div>
     <span>Campus <em>Lost & Found</em></span>
-  </div>
+  </a>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
     <button class="nav-tab" onclick="showPage('report')">📋 Report</button>
@@ -178,13 +220,15 @@
   <button class="nav-tab" onclick="showPage('browse');closeMobile()">🔍 Browse Items</button>
 </div>
 
-<!-- HOME -->
+<!-- ═══════════ HOME PAGE ═══════════ -->
 <div class="page active" id="page-home">
   <div class="hero">
     <h1>Campus<br><span class="gd">Lost & Found</span></h1>
     <p>A clean, fast portal to report lost items and reunite found ones with their owners — built for students, on any device.</p>
     <div class="search-bar-wrap">
-      <input type="text" id="heroSearch" placeholder="Search for a lost item…" oninput="heroSearchGo(this.value)" onkeydown="if(event.key==='Enter')heroSearchGo(this.value,true)">
+      <input type="text" id="heroSearch" placeholder="Search for a lost item…"
+        oninput="heroSearchGo(this.value)"
+        onkeydown="if(event.key==='Enter')heroSearchGo(this.value,true)">
     </div>
     <div class="hero-stats">
       <div class="stat-card s-total"><div class="num" id="statTotal">0</div><div class="lbl">Total Items</div></div>
@@ -224,8 +268,17 @@
   </div>
 </div>
 
-<!-- REPORT -->
+<!-- ═══════════ REPORT PAGE ═══════════ -->
 <div class="page" id="page-report">
+
+  <!-- BACK BUTTON -->
+  <button class="back-btn" onclick="showPage('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    Back to Home
+  </button>
+
   <div style="text-align:center;margin-bottom:32px;">
     <h2 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:8px;">Report an Item</h2>
     <p style="color:var(--muted);font-size:15px;">Fill in the details below — it takes less than 2 minutes.</p>
@@ -237,10 +290,7 @@
   </div>
 
   <div class="form-card">
-
-    <!-- REPORTER INFO SECTION -->
     <div class="form-section-label">👤 Reporter Information</div>
-
     <div class="form-row">
       <div class="form-group" id="fg-fullname">
         <label>Full Name *</label>
@@ -249,20 +299,17 @@
       </div>
       <div class="form-group" id="fg-email">
         <label>Email Address *</label>
-        <input type="email" id="f-email" placeholder="e.g. juan@university.edu">
+        <input type="email" id="f-email" placeholder="e.g. juan@gmail.com">
         <div class="form-error">A valid email address is required.</div>
       </div>
     </div>
-
     <div class="form-group" id="fg-address">
       <label>Address *</label>
       <input type="text" id="f-address" placeholder="e.g. Dorm 3, Room 204, University Avenue">
       <div class="form-error">Address is required.</div>
     </div>
 
-    <!-- ITEM INFO SECTION -->
     <div class="form-section-label" style="margin-top:8px;">📦 Item Details</div>
-
     <div class="form-row">
       <div class="form-group" id="fg-name">
         <label>Item Name *</label>
@@ -285,7 +332,6 @@
         <div class="form-error">Please select a category.</div>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group" id="fg-date">
         <label>Date *</label>
@@ -298,18 +344,15 @@
         <div class="form-error">Location is required.</div>
       </div>
     </div>
-
     <div class="form-group" id="fg-desc">
       <label>Description *</label>
-      <textarea id="f-desc" placeholder="Describe the item in detail — color, brand, distinguishing marks…"></textarea>
+      <textarea id="f-desc" placeholder="Describe the item — color, brand, distinguishing marks…"></textarea>
       <div class="form-error">Description is required.</div>
     </div>
-
     <div class="form-group">
       <label>Other Contact (Optional)</label>
       <input type="text" id="f-contact" placeholder="Phone number or alternate contact">
     </div>
-
     <div class="form-group">
       <label>Photo (Optional)</label>
       <div class="photo-drop" onclick="document.getElementById('f-photo').click()">
@@ -319,13 +362,21 @@
         <img id="photoPreview" class="photo-preview" alt="Preview">
       </div>
     </div>
-
     <button class="btn-primary" onclick="submitReport()">Submit Report</button>
   </div>
 </div>
 
-<!-- BROWSE -->
+<!-- ═══════════ BROWSE PAGE ═══════════ -->
 <div class="page" id="page-browse">
+
+  <!-- BACK BUTTON -->
+  <button class="back-btn" onclick="showPage('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    Back to Home
+  </button>
+
   <div style="margin-bottom:24px;">
     <h2 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:8px;">Browse Items</h2>
     <p style="color:var(--muted);font-size:15px;">Search and filter all reported items.</p>
@@ -341,7 +392,7 @@
     </div>
   </div>
 
-  <div class="filter-chips" style="margin-bottom:20px;flex-wrap:wrap;" id="catChips">
+  <div class="filter-chips" style="margin-bottom:20px;" id="catChips">
     <div class="chip active" data-cat="all" onclick="setCat('all',this)">All Categories</div>
     <div class="chip" data-cat="Electronics" onclick="setCat('Electronics',this)">📱 Electronics</div>
     <div class="chip" data-cat="Clothing" onclick="setCat('Clothing',this)">👕 Clothing</div>
@@ -356,7 +407,7 @@
   <div class="items-grid" id="browseGrid"></div>
 </div>
 
-<!-- MODAL -->
+<!-- ═══════════ MODAL ═══════════ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modalBox">
     <div class="modal-img" id="modalImg"></div>
@@ -384,10 +435,10 @@ let activeFormTab='lost';
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(items));}
 function load(){try{items=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){items=[];}}
 
+/* ── MODAL ── */
 function openModal(id){
   const item=items.find(i=>i.id===id);
   if(!item)return;
-  const overlay=document.getElementById('modalOverlay');
   const imgEl=document.getElementById('modalImg');
   imgEl.innerHTML=item.photo?`<img src="${item.photo}" alt="${esc(item.name)}">`:`<span>${categoryEmoji(item.category)}</span>`;
   document.getElementById('modalTitle').innerHTML=`${esc(item.name)} <span class="badge badge-${item.status}" style="font-size:13px;vertical-align:middle">${item.status}</span>`;
@@ -424,7 +475,7 @@ function openModal(id){
     closeModal();
     showToast('🔵 Item marked as claimed!','info');
   };
-  overlay.classList.add('open');
+  document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
 
@@ -446,22 +497,41 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
+/* ── PAGE NAVIGATION ── */
 function showPage(p){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  const map={home:'🏠',report:'📋',browse:'🔍'};
+  const map={home:'Home',report:'Report',browse:'Browse'};
   document.querySelectorAll('.nav-tab').forEach(el=>{
-    if(el.textContent.includes(map[p]))el.classList.add('active');
+    if(el.textContent.trim().includes(map[p]))el.classList.add('active');
   });
   if(p==='browse')renderBrowse();
   if(p==='home')updateStats();
-  window.scrollTo(0,0);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function toggleMobile(){document.getElementById('mobileMenu').classList.toggle('open');}
-function closeMobile(){document.getElementById('mobileMenu').classList.remove('open');}
+/* ── HAMBURGER ── */
+function toggleMobile(){
+  const menu=document.getElementById('mobileMenu');
+  const bars=document.querySelectorAll('.hamburger span');
+  menu.classList.toggle('open');
+  const open=menu.classList.contains('open');
+  bars[0].style.cssText=open?'transform:rotate(45deg) translate(5px,5px)':'';
+  bars[1].style.cssText=open?'opacity:0;transform:scaleX(0)':'';
+  bars[2].style.cssText=open?'transform:rotate(-45deg) translate(5px,-5px)':'';
+}
+function closeMobile(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.querySelectorAll('.hamburger span').forEach(b=>b.style.cssText='');
+}
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('mobileMenu');
+  const ham=document.querySelector('.hamburger');
+  if(menu.classList.contains('open')&&!menu.contains(e.target)&&!ham.contains(e.target))closeMobile();
+});
 
+/* ── FORM ── */
 function setFormTab(t){
   activeFormTab=t;
   document.getElementById('tabLost').classList.toggle('active',t==='lost');
@@ -477,9 +547,7 @@ function previewPhoto(input){
   }
 }
 
-function isValidEmail(email){
-  return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
+function isValidEmail(email){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());}
 
 function validateField(id,groupId,customCheck){
   const val=document.getElementById(id).value.trim();
@@ -536,35 +604,41 @@ function resetForm(){
   document.getElementById('f-date').valueAsDate=new Date();
 }
 
+/* ── STATS ── */
 function updateStats(){
-  const t=items.length,l=items.filter(i=>i.status==='lost').length,
-        f=items.filter(i=>i.status==='found').length,c=items.filter(i=>i.status==='claimed').length;
+  const t=items.length,
+        l=items.filter(i=>i.status==='lost').length,
+        f=items.filter(i=>i.status==='found').length,
+        c=items.filter(i=>i.status==='claimed').length;
   document.getElementById('statTotal').textContent=t;
   document.getElementById('statLost').textContent=l;
   document.getElementById('statFound').textContent=f;
   document.getElementById('statClaimed').textContent=c;
 }
 
+/* ── BROWSE ── */
 function setFilter(f,el){
   activeFilter=f;
-  document.querySelectorAll('.filter-chips .chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.filter-chips .chip[data-filter]').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   renderBrowse();
 }
-
 function setCat(c,el){
   activeCat=c;
   document.querySelectorAll('#catChips .chip').forEach(ch=>ch.classList.remove('active'));
   el.classList.add('active');
   renderBrowse();
 }
-
 function renderBrowse(){
   const query=(document.getElementById('browseSearch')?document.getElementById('browseSearch').value:'').toLowerCase();
   const filtered=items.filter(item=>{
     const matchStatus=activeFilter==='all'||item.status===activeFilter;
     const matchCat=activeCat==='all'||item.category===activeCat;
-    const matchQ=!query||item.name.toLowerCase().includes(query)||item.description.toLowerCase().includes(query)||item.location.toLowerCase().includes(query)||item.category.toLowerCase().includes(query)||(item.fullname&&item.fullname.toLowerCase().includes(query));
+    const matchQ=!query||item.name.toLowerCase().includes(query)||
+      item.description.toLowerCase().includes(query)||
+      item.location.toLowerCase().includes(query)||
+      item.category.toLowerCase().includes(query)||
+      (item.fullname&&item.fullname.toLowerCase().includes(query));
     return matchStatus&&matchCat&&matchQ;
   });
   const grid=document.getElementById('browseGrid');
@@ -575,7 +649,7 @@ function renderBrowse(){
   }
   grid.innerHTML=filtered.map(item=>`
     <div class="item-card" onclick="openModal('${item.id}')">
-      <div class="item-img">${item.photo?`<img src="${item.photo}" alt="${esc(item.name)}">`:categoryEmoji(item.category)}</div>
+      <div class="item-img">${item.photo?`<img src="${item.photo}" alt="${esc(item.name)}" loading="lazy">`:categoryEmoji(item.category)}</div>
       <div class="item-body">
         <div class="item-header">
           <div class="item-name">${esc(item.name)}</div>
@@ -597,6 +671,7 @@ function heroSearchGo(val,go){
   if(go){document.getElementById('browseSearch').value=val;showPage('browse');}
 }
 
+/* ── TOAST ── */
 let toastTimer;
 function showToast(msg,type='success'){
   const t=document.getElementById('toast');
@@ -605,12 +680,14 @@ function showToast(msg,type='success'){
   toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
+/* ── UTILS ── */
 function esc(str){
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function formatDate(d){
   if(!d)return'—';
-  try{return new Date(d+'T12:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'});}catch(e){return d;}
+  try{return new Date(d+'T12:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'});}
+  catch(e){return d;}
 }
 function categoryEmoji(cat){
   const map={Electronics:'📱',Clothing:'👕',Accessories:'👜',Documents:'📄',Keys:'🔑',Jewelry:'💍',Books:'📚',Other:'📦'};
